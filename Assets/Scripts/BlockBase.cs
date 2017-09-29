@@ -5,9 +5,46 @@ using UnityEngine;
 public class BlockBase : MonoBehaviour {
 
     public GameObject cubePrefab;
-
     public General.Block block;
+    public int x;
+    public int y;
+    public int xMax, xMin;
 
+
+    private int leftOffset() {
+        for (int k = 0; k< 4; k++) {
+            for (int j = 0; j< 4; j++) {
+                for (int i = 0; i< 2; i++) {
+                    if (block.block[i,j,k] != 0) {
+                        return k;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    private int rightOffset() {
+	    for (int k = 3; k >= 0; k--) {
+		    for (int j = 0; j < 4; j++) {
+			    for (int i = 0; i < 2; i++) {
+				    if (block.block[i, j, k] != 0) {
+					    return k;
+				    }
+			    }
+		    }
+	    }
+	    return 0;
+    }
+
+    public void computeXRange() {
+        xMin = -leftOffset();
+        xMax = General.length - 1 - 4 + rightOffset();
+
+        print(xMin);
+        print(xMax);
+
+    }
 
 
     public void createCubes() {
@@ -23,7 +60,7 @@ public class BlockBase : MonoBehaviour {
 				    if (block.block[i, j, k] != 0) {
 					    GameObject newCube = Instantiate(cubePrefab);
 				    	newCube.transform.SetParent(blockObject.transform);
-			    		newCube.transform.position = new Vector3(k * General.cubeSize, j * General.cubeSize, i * General.cubeSize);
+                        newCube.transform.localPosition = new Vector3(k * General.cubeSize, j * General.cubeSize, i * General.cubeSize);
 		    		}
                         
 	    		}
@@ -32,19 +69,19 @@ public class BlockBase : MonoBehaviour {
     }
 
     public void rotateRight() {
-        General.Block newBlock;
-        newBlock.block = new int[2, 4, 4];
+
+        int[,,] newBlock = new int[2, 4, 4];
             
         for (int i = 0; i< 2; i++) {
             for (int j = 0; j< block.size; j++) {
                 for (int k = 0; k<= block.size; k++) {
-                    newBlock.block[i, j, k] = block.block[ i, k, block.size - j - 1];
+                    newBlock[i, j, k] = block.block[ i, k, block.size - j - 1];
                 }
             }
         }
-        newBlock.size = block.size;
 
-        block = newBlock;
+
+        block.block = newBlock;
 
         this.createCubes();
     }

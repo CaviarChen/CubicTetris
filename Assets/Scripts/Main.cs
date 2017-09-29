@@ -9,9 +9,13 @@ public class Main : MonoBehaviour
 
     static General.Block[] blocks;
 
+    public GameObject[,,] space = new GameObject[2, General.length, General.height + 4];
+
 
     private GameObject currentBlockObject;
     private BlockBase currentScript;
+    private float timeForNextCheck;
+    private bool isMoving = false;
 
 	// Use this for initialization
 	void Start () {
@@ -33,7 +37,7 @@ public class Main : MonoBehaviour
             {0, 0, 0, 0}
         }
         };
-
+        // size decide the center of the block (for rotating)
         blocks[0].size = 3;
 
         blocks[1].block = new int[2, 4, 4] {
@@ -59,6 +63,8 @@ public class Main : MonoBehaviour
 
         currentBlockObject = createBlock(this.gameObject, blocks[0]);
         currentScript = (BlockBase) currentBlockObject.GetComponent(typeof(BlockBase));
+        timeForNextCheck = General.timeForEachMove;
+        isMoving = true;
         	
 	}
 
@@ -69,20 +75,48 @@ public class Main : MonoBehaviour
         BlockBase script = (BlockBase) blockObject.GetComponent(typeof(BlockBase));
         script.block = block;
         script.createCubes();
+        script.computeXRange();
+
+
+        // temporary
+        script.x = script.xMin;
+        script.y = General.height - 1 + 4;
+
+
+        blockObject.transform.position = new Vector3(script.x * General.cubeSize, script.y * General.cubeSize, 0.0f);
+
+
+
         return blockObject;
     }
-
-
-
-
 	
 	// Update is called once per frame
 	void Update () {
+        if (isMoving) {
+            currentBlockObject.transform.position +=
+                new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
+
+            timeForNextCheck -= Time.deltaTime;
+
+            if (timeForNextCheck <= 0) {
+                timeForNextCheck += General.timeForEachMove;
+                currentScript.y -= 1;
+                print(currentScript.y);
+                if (currentScript.y == -1) {
+                    isMoving = false;
+                }
+
+            }
+        }
+
+
+
+
         if (Input.GetKeyDown("space")) {
             currentScript.rotateRight();
 
-            
+
         }
-		
-	}
+
+    }
 }

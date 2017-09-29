@@ -10,6 +10,11 @@ public class General : MonoBehaviour {
     }
 
     public static float cubeSize = 1.05f;
+    // width is 2
+    public static int length = 6;
+    public static int height = 8;
+    public static float timeForEachMove = 1.0f;
+
 
 
 	// Use this for initialization
