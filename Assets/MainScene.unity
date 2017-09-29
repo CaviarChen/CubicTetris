@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 1054221709}
   - component: {fileID: 1054221708}
   m_Layer: 0
-  m_Name: GameObjectTest
+  m_Name: GameArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fc07266e9f9d0846929548146966a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubePrefabs: {fileID: 1038381184100972, guid: cdcc66d5bd50e90459da879b5e0d1da5,
+  blockPrefab: {fileID: 1617773752388696, guid: 53a5ca8b5ca614a68ad3b0e94d129882,
     type: 2}
 --- !u!4 &1054221709
 Transform:
