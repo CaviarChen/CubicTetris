@@ -9,7 +9,9 @@ public class Main : MonoBehaviour
 
     static General.Block[] blocks;
 
-    public GameObject[,,] space = new GameObject[2, General.length, General.height + 4];
+
+    public GameObject FinishedCube;
+    private GameObject[,,] space = new GameObject[2, General.length, General.height + 4];
 
 
     private GameObject currentBlockObject;
@@ -60,13 +62,19 @@ public class Main : MonoBehaviour
 
         // --------------------
 
+        addNewBlock();
 
-        currentBlockObject = createBlock(this.gameObject, blocks[0]);
-        currentScript = (BlockBase) currentBlockObject.GetComponent(typeof(BlockBase));
+
+
+    }
+
+    void addNewBlock() {
+        currentBlockObject = createBlock(this.gameObject, blocks[1]);
+        currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
         timeForNextCheck = General.timeForEachMove;
         isMoving = true;
-        	
-	}
+
+    }
 
 
     GameObject createBlock(GameObject playArea, General.Block block) {
@@ -80,17 +88,132 @@ public class Main : MonoBehaviour
 
         // temporary
         script.x = script.xMin;
-        script.y = General.height - 1 + 4;
+        script.y = General.height;
 
+        script.fixPositionX();
+        script.fixPositionY();
 
-        blockObject.transform.position = new Vector3(script.x * General.cubeSize, script.y * General.cubeSize, 0.0f);
 
 
 
         return blockObject;
     }
-	
-	// Update is called once per frame
+
+    // Update is called once per frame1
+
+    bool isSpaceoccupied(int i, int j, int k) {
+        if (!((0 <= i) && (i < 2))) return true;
+        if (!((0 <= j) && (j < General.length))) return true;
+        if (!((0 <= k) && (k < General.height + 4))) return true;
+        if (space[i, j, k] != null) return true;
+
+        return false;
+    }
+
+
+    public bool needStop(int[,,] block, int xOffset, int yOffset) {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    if (block[i,j,k]!=0) {
+                        if(isSpaceoccupied(i, k + currentScript.x + xOffset, j + currentScript.y + yOffset)) {
+                            print("xxx");
+                            print(i);
+                            print(k + currentScript.x + xOffset);
+                            print(j + currentScript.y + yOffset);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return false;
+
+    }
+
+    void finishCurrentBlock() {
+        currentScript.fixPositionX();
+        currentScript.fixPositionY();
+
+        // add to space
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    if (currentScript.block.block[i, j, k] != 0) {
+                        space[i, k + currentScript.x, j + currentScript.y] = currentScript.cubes[currentScript.block.block[i, j, k]];
+                    }
+                }
+            }
+        }
+
+        currentScript.setCubeParent(FinishedCube);
+        Destroy(currentBlockObject);
+    }
+
+    int findFullRow() {
+        for (int k = 0; k < General.height; k++) {
+            // for each row
+            bool rowFlag = true;
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < General.length; j++) {
+                    if (space[i, j, k] == null) {
+                        rowFlag = false;
+                        break;
+                    }
+                }
+                if (!rowFlag) break;
+            }
+
+            if(rowFlag) {
+                return k;
+            }
+
+        }
+
+        return -1;
+
+    }
+
+
+    void cleanFullRow() {
+
+        while (true) {
+            int row = findFullRow();
+            if (row == -1) break;
+
+            // delete
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < General.length; j++) {
+                    Destroy(space[i, j, row]);
+                }
+            }
+
+            // fall
+            for (int k = row; k < General.height+4; k++) {
+                // for each row
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < General.length; j++) {
+                        if(k==General.height+4-1) {
+                            // clean top row
+                            space[i, j, k] = null;
+                        } else {
+                            space[i, j, k] = space[i, j, k + 1];
+                            if (space[i,j,k]!=null) {
+                                space[i, j, k].transform.position -= new Vector3(0.0f, General.cubeSize, 0.0f);
+                            }                            
+                        }
+                        
+
+                    }
+                }
+            }
+        }
+
+    }
+
+
 	void Update () {
         if (isMoving) {
             currentBlockObject.transform.position +=
@@ -101,22 +224,38 @@ public class Main : MonoBehaviour
             if (timeForNextCheck <= 0) {
                 timeForNextCheck += General.timeForEachMove;
                 currentScript.y -= 1;
-                print(currentScript.y);
-                if (currentScript.y == -1) {
+                
+
+                if (needStop(currentScript.block.block,0, -1)) {
                     isMoving = false;
+                    finishCurrentBlock();
+                    cleanFullRow();
+                    addNewBlock();
+                } 
+
+            } else {
+                if (Input.GetKeyDown("space")) {
+                    currentScript.rotateRight(this);
                 }
-
+                if (Input.GetKeyDown("a")) {
+                    if (!needStop(currentScript.block.block, -1, 0)) {
+                        currentScript.x -= 1;
+                        currentScript.fixPositionX();
+                    }
+                }
+                if (Input.GetKeyDown("d")) {
+                    if (!needStop(currentScript.block.block, 1, 0)) {
+                        currentScript.x += 1;
+                        currentScript.fixPositionX();
+                    }
+                }
             }
-        }
-
-
-
-
-        if (Input.GetKeyDown("space")) {
-            currentScript.rotateRight();
 
 
         }
+
+
+
 
     }
 }

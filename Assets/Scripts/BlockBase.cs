@@ -9,6 +9,7 @@ public class BlockBase : MonoBehaviour {
     public int x;
     public int y;
     public int xMax, xMin;
+    public GameObject[] cubes;
 
 
     private int leftOffset() {
@@ -54,13 +55,16 @@ public class BlockBase : MonoBehaviour {
 		    Destroy(blockObject.transform.GetChild(i).gameObject);
 	    }
 
-	    for (int i = 0; i < 2; i++) {
+        cubes = new GameObject[4 * 4 * 2 + 1];
+
+        for (int i = 0; i < 2; i++) {
 		    for (int j = 0; j < 4; j++) {
 			    for (int k = 0; k < 4; k++) {
 				    if (block.block[i, j, k] != 0) {
 					    GameObject newCube = Instantiate(cubePrefab);
 				    	newCube.transform.SetParent(blockObject.transform);
                         newCube.transform.localPosition = new Vector3(k * General.cubeSize, j * General.cubeSize, i * General.cubeSize);
+                        cubes[block.block[i, j, k]] = newCube;
 		    		}
                         
 	    		}
@@ -68,7 +72,23 @@ public class BlockBase : MonoBehaviour {
     	}
     }
 
-    public void rotateRight() {
+    public void setCubeParent(GameObject parent) {
+        GameObject blockObject = this.gameObject;
+        for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
+            blockObject.transform.GetChild(i).gameObject.transform.parent = parent.transform;
+        }
+
+    }
+
+    public void fixPositionX() {
+        this.gameObject.transform.position = new Vector3(x * General.cubeSize, this.gameObject.transform.position.y, 0.0f);
+    }
+
+    public void fixPositionY() {
+        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, y * General.cubeSize, 0.0f);
+    }
+
+    public void rotateRight(Main mainScript) {
 
         int[,,] newBlock = new int[2, 4, 4];
             
@@ -80,6 +100,9 @@ public class BlockBase : MonoBehaviour {
             }
         }
 
+        if (mainScript.needStop(newBlock, 0, 0)) {
+            return;
+        }
 
         block.block = newBlock;
 
