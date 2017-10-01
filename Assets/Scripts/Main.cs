@@ -7,7 +7,7 @@ public class Main : MonoBehaviour
     public GameObject blockPrefab;
 
 
-    static General.Block[] blocks;
+    public static General.Block[] blocks;
 
 
     public GameObject FinishedCube;
@@ -18,49 +18,12 @@ public class Main : MonoBehaviour
     private BlockBase currentScript;
     private float timeForNextCheck;
     private bool isMoving = false;
+    private float timeForMovingAni;
 
 	// Use this for initialization
 	void Start () {
 
-        // --------------------
-        blocks = new General.Block[2];
-        blocks[0].block = new int[2, 4, 4] {
-        {
-            {0, 0, 0, 0},
-            {0, 1, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0},
-
-        },
-        {
-            {0, 0, 0, 0},
-            {2, 3, 4, 0},
-            {0, 5, 0, 0},
-            {0, 0, 0, 0}
-        }
-        };
-        // size decide the center of the block (for rotating)
-        blocks[0].size = 3;
-
-        blocks[1].block = new int[2, 4, 4] {
-        {
-            {1, 2, 0, 0},
-            {3, 4, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0},
-        },
-        {
-            {5, 6, 0, 0},
-            {7, 8, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0},
-
-        }
-        };
-
-        blocks[1].size = 2;
-
-        // --------------------
+        blocks = General.generateBlockTemplate();
 
         addNewBlock();
 
@@ -71,7 +34,7 @@ public class Main : MonoBehaviour
     void addNewBlock() {
         currentBlockObject = createBlock(this.gameObject, blocks[1]);
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
-        timeForNextCheck = General.timeForEachMove;
+        timeForNextCheck = General.timeForEachDrop;
         isMoving = true;
 
     }
@@ -216,24 +179,59 @@ public class Main : MonoBehaviour
 
 	void Update () {
         if (isMoving) {
-            currentBlockObject.transform.position +=
-                new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
+
+
+
+
+          //  currentBlockObject.transform.position +=
+          //      new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
+            
 
             timeForNextCheck -= Time.deltaTime;
 
-            if (timeForNextCheck <= 0) {
-                timeForNextCheck += General.timeForEachMove;
-                currentScript.y -= 1;
-                
 
-                if (needStop(currentScript.block.block,0, -1)) {
+            if (timeForNextCheck <= 0) {
+                timeForNextCheck += General.timeForEachDrop;
+
+                if (needStop(currentScript.block.block, 0, -1)) {
+                    currentScript.fixPositionY();
                     isMoving = false;
                     finishCurrentBlock();
                     cleanFullRow();
                     addNewBlock();
-                } 
+                } else {
+                    currentScript.y -= 1;
+                    timeForMovingAni = 0;
+                  
+                }
+
+
 
             } else {
+
+
+
+
+                if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0 ) {
+                    float yChange = -General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
+
+                    timeForMovingAni += Time.deltaTime;
+
+                    yChange += General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
+                    currentBlockObject.transform.position
+                                      += new Vector3(0.0f, - yChange, 0.0f);
+
+                }
+
+                if (timeForMovingAni > General.timeForEachMoveAni) {
+                    currentScript.fixPositionY();
+                    timeForMovingAni = -1.0f;
+                }
+
+
+
+
+
                 if (Input.GetKeyDown("space")) {
                     currentScript.rotateRight(this);
                 }

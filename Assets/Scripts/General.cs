@@ -11,9 +11,61 @@ public class General : MonoBehaviour {
 
     public static float cubeSize = 1.05f;
     // width is 2
-    public static int length = 6;
-    public static int height = 8;
-    public static float timeForEachMove = 1.0f;
+    public static int length = 8;
+    public static int height = 10;
+    public static float timeForEachDrop = 1.0f;
+    public static float timeForEachMoveAni = 0.2f;
+
+
+    // takes x in [0,1] and return y in [0,1]
+    // (-cos(x*pi)+1) / 2
+    public static float rubberBandFunction(float x) {
+        return (-Mathf.Cos(x * Mathf.PI) + 1) / 2.0f;
+    }
+
+    public static Block[] generateBlockTemplate() {
+           // --------------------
+        General.Block[] blocks = new General.Block[2];
+        blocks[0].block = new int[2, 4, 4] {
+        {
+            {0, 0, 0, 0},
+            {0, 1, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+
+        },
+        {
+            {0, 0, 0, 0},
+            {2, 3, 4, 0},
+            {0, 5, 0, 0},
+            {0, 0, 0, 0}
+        }
+        };
+        // size decide the center of the block (for rotating)
+        blocks[0].size = 3;
+
+        blocks[1].block = new int[2, 4, 4] {
+        {
+            {1, 2, 0, 0},
+            {3, 4, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+        },
+        {
+            {5, 6, 0, 0},
+            {7, 8, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+
+        }
+        };
+
+        blocks[1].size = 2;
+
+        // --------------------
+
+        return blocks;
+    }
 
 
 
