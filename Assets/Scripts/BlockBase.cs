@@ -11,6 +11,8 @@ public class BlockBase : MonoBehaviour {
     public int xMax, xMin;
     public GameObject[] cubes;
 
+    //private float timeForRotateAni = -1.0f;
+
 
     private int leftOffset() {
         for (int k = 0; k< 4; k++) {
@@ -94,7 +96,7 @@ public class BlockBase : MonoBehaviour {
             
         for (int i = 0; i< 2; i++) {
             for (int j = 0; j< block.size; j++) {
-                for (int k = 0; k<= block.size; k++) {
+                for (int k = 0; k< block.size; k++) {
                     newBlock[i, j, k] = block.block[ i, k, block.size - j - 1];
                 }
             }
@@ -106,7 +108,15 @@ public class BlockBase : MonoBehaviour {
 
         block.block = newBlock;
 
-        this.createCubes();
+
+        GameObject blockObject = this.gameObject;
+        float center = General.cubeSize * (block.size - 1) / 2.0f;
+
+        for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
+            blockObject.transform.GetChild(i).gameObject.transform.RotateAround
+                       (transform.position + new Vector3(center , center, 0.0f), new Vector3(0.0f, 0.0f, 1.0f), -90.0f);
+        }
+
     }
 
 
