@@ -18,6 +18,7 @@ public class Main : MonoBehaviour
     private BlockBase currentScript;
     private float timeForNextCheck;
     private bool isMoving = false;
+    private bool allowRoate = true;
     private float timeForMovingAni;
 
 	// Use this for initialization
@@ -32,10 +33,11 @@ public class Main : MonoBehaviour
     }
 
     void addNewBlock() {
-        currentBlockObject = createBlock(this.gameObject, blocks[9]);
+        currentBlockObject = createBlock(this.gameObject, blocks[1]);
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
         timeForNextCheck = General.timeForEachDrop;
         isMoving = true;
+        allowRoate = true;
 
     }
 
@@ -177,15 +179,15 @@ public class Main : MonoBehaviour
     }
 
 
-	void Update () {
+    void Update() {
         if (isMoving) {
 
 
 
 
-          //  currentBlockObject.transform.position +=
-          //      new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
-            
+            //  currentBlockObject.transform.position +=
+            //      new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
+
 
             timeForNextCheck -= Time.deltaTime;
 
@@ -202,7 +204,10 @@ public class Main : MonoBehaviour
                 } else {
                     currentScript.y -= 1;
                     timeForMovingAni = 0;
-                  
+                    if (needStop(currentScript.block.block, 0, -1)) {
+                        allowRoate = false;
+                    }
+
                 }
 
 
@@ -212,14 +217,14 @@ public class Main : MonoBehaviour
 
 
 
-                if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0 ) {
+                if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0) {
                     float yChange = -General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
 
                     timeForMovingAni += Time.deltaTime;
 
                     yChange += General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
                     currentBlockObject.transform.position
-                                      += new Vector3(0.0f, - yChange, 0.0f);
+                                      += new Vector3(0.0f, -yChange, 0.0f);
 
                 }
 
@@ -232,7 +237,7 @@ public class Main : MonoBehaviour
 
 
 
-                if (Input.GetKeyDown("space")) {
+                if (Input.GetKeyDown("space") && allowRoate) {
                     currentScript.rotateRight(this);
                 }
                 if (Input.GetKeyDown("a")) {
@@ -251,7 +256,6 @@ public class Main : MonoBehaviour
 
 
         }
-
 
 
 

@@ -11,7 +11,8 @@ public class BlockBase : MonoBehaviour {
     public int xMax, xMin;
     public GameObject[] cubes;
 
-    //private float timeForRotateAni = -1.0f;
+    private int currentDegree = 0;
+    private int targetDegree = 0;
 
 
     private int leftOffset() {
@@ -109,14 +110,7 @@ public class BlockBase : MonoBehaviour {
         block.block = newBlock;
 
 
-        GameObject blockObject = this.gameObject;
-        float center = General.cubeSize * (block.size - 1) / 2.0f;
-
-        for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
-            blockObject.transform.GetChild(i).gameObject.transform.RotateAround
-                       (transform.position + new Vector3(center , center, 0.0f), new Vector3(0.0f, 0.0f, 1.0f), -90.0f);
-        }
-
+        targetDegree -= 90;
     }
 
 
@@ -126,7 +120,32 @@ public class BlockBase : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	void Update() {
+        if (targetDegree != currentDegree) {
+            int changeDegree = targetDegree - currentDegree;
+            int changeDegreeNow = (int)(Time.deltaTime * General.rotateSpeed);
+            if (changeDegree < 0) {
+                changeDegreeNow *= -1;
+            }
+
+            if (Mathf.Abs(changeDegreeNow) > Mathf.Abs(changeDegree)) {
+                changeDegreeNow = changeDegree;
+            }
+
+            currentDegree += changeDegreeNow;
+
+            GameObject blockObject = this.gameObject;
+            float center = General.cubeSize * (block.size - 1) / 2.0f;
+
+            for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
+                blockObject.transform.GetChild(i).gameObject.transform.RotateAround
+                           (transform.position + new Vector3(center, center, 0.0f), new Vector3(0.0f, 0.0f, 1.0f), changeDegreeNow);
+            }
+
+
+        } else {
+            targetDegree = 0;
+            currentDegree = 0;
+        }
+    }
 }
