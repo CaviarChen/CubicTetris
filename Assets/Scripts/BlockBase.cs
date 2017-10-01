@@ -94,7 +94,7 @@ public class BlockBase : MonoBehaviour {
             
         for (int i = 0; i< 2; i++) {
             for (int j = 0; j< block.size; j++) {
-                for (int k = 0; k<= block.size; k++) {
+                for (int k = 0; k< block.size; k++) {
                     newBlock[i, j, k] = block.block[ i, k, block.size - j - 1];
                 }
             }

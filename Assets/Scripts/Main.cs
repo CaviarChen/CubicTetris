@@ -32,7 +32,7 @@ public class Main : MonoBehaviour
     }
 
     void addNewBlock() {
-        currentBlockObject = createBlock(this.gameObject, blocks[1]);
+        currentBlockObject = createBlock(this.gameObject, blocks[9]);
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
         timeForNextCheck = General.timeForEachDrop;
         isMoving = true;
