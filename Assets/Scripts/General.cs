@@ -15,6 +15,7 @@ public class General : MonoBehaviour {
     public static int height = 10;
     public static float timeForEachDrop = 1.0f;
     public static float timeForEachMoveAni = 0.2f;
+    //public static float timeForEachRotateAni = 0.1f;
 
 
     // takes x in [0,1] and return y in [0,1]
