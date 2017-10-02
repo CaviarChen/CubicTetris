@@ -8,6 +8,7 @@ public class BlockBase : MonoBehaviour {
     public General.Block block;
     public int x;
     public int y;
+    public int z;
     public int xMax, xMin;
     public GameObject[] cubes;
 
@@ -84,11 +85,15 @@ public class BlockBase : MonoBehaviour {
     }
 
     public void fixPositionX() {
-        this.gameObject.transform.position = new Vector3(x * General.cubeSize, this.gameObject.transform.position.y, 0.0f);
+        this.gameObject.transform.position = new Vector3(x * General.cubeSize, this.gameObject.transform.position.y, this.gameObject.transform.position.z);
+    }
+
+    public void fixPositionZ() {
+        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, z * General.cubeSize);
     }
 
     public void fixPositionY() {
-        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, y * General.cubeSize, 0.0f);
+        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, y * General.cubeSize, this.gameObject.transform.position.z);
     }
 
     public void rotateRight(Main mainScript) {
@@ -103,7 +108,7 @@ public class BlockBase : MonoBehaviour {
             }
         }
 
-        if (mainScript.needStop(newBlock, 0, 0)) {
+        if (mainScript.needStop(newBlock, 0, 0, 0)) {
             return;
         }
 

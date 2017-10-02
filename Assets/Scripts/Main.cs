@@ -33,8 +33,24 @@ public class Main : MonoBehaviour
     }
 
     void addNewBlock() {
-        currentBlockObject = createBlock(this.gameObject, blocks[1]);
+
+        // random block
+        currentBlockObject = createBlock(this.gameObject, blocks[Random.Range(0, blocks.Length)]);
+
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
+        // random pos
+        currentScript.x = Random.Range(currentScript.xMin, currentScript.xMax + 1);
+        
+        if (!needStop(currentScript.block.block, 0, 0, 1)) {
+            if(Random.Range(0,2)==1) {
+                currentScript.z += 1;
+            }
+        }
+        currentScript.fixPositionZ();
+        currentScript.fixPositionX();
+
+
+
         timeForNextCheck = General.timeForEachDrop;
         isMoving = true;
         allowRoate = true;
@@ -76,16 +92,12 @@ public class Main : MonoBehaviour
     }
 
 
-    public bool needStop(int[,,] block, int xOffset, int yOffset) {
+    public bool needStop(int[,,] block, int xOffset, int yOffset, int zOffset) {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
                     if (block[i,j,k]!=0) {
-                        if(isSpaceoccupied(i, k + currentScript.x + xOffset, j + currentScript.y + yOffset)) {
-                            print("xxx");
-                            print(i);
-                            print(k + currentScript.x + xOffset);
-                            print(j + currentScript.y + yOffset);
+                        if(isSpaceoccupied(i + currentScript.z + zOffset, k + currentScript.x + xOffset, j + currentScript.y + yOffset)) {
                             return true;
                         }
                     }
@@ -107,7 +119,7 @@ public class Main : MonoBehaviour
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
                     if (currentScript.block.block[i, j, k] != 0) {
-                        space[i, k + currentScript.x, j + currentScript.y] = currentScript.cubes[currentScript.block.block[i, j, k]];
+                        space[i + currentScript.z, k + currentScript.x, j + currentScript.y] = currentScript.cubes[currentScript.block.block[i, j, k]];
                     }
                 }
             }
@@ -147,6 +159,9 @@ public class Main : MonoBehaviour
         while (true) {
             int row = findFullRow();
             if (row == -1) break;
+
+
+            Score.score += 100;
 
             // delete
             for (int i = 0; i < 2; i++) {
@@ -195,7 +210,7 @@ public class Main : MonoBehaviour
             if (timeForNextCheck <= 0) {
                 timeForNextCheck += General.timeForEachDrop;
 
-                if (needStop(currentScript.block.block, 0, -1)) {
+                if (needStop(currentScript.block.block, 0, -1, 0)) {
                     currentScript.fixPositionY();
                     isMoving = false;
                     finishCurrentBlock();
@@ -204,7 +219,7 @@ public class Main : MonoBehaviour
                 } else {
                     currentScript.y -= 1;
                     timeForMovingAni = 0;
-                    if (needStop(currentScript.block.block, 0, -1)) {
+                    if (needStop(currentScript.block.block, 0, -1, 0)) {
                         allowRoate = false;
                     }
 
@@ -241,15 +256,27 @@ public class Main : MonoBehaviour
                     currentScript.rotateRight(this);
                 }
                 if (Input.GetKeyDown("a")) {
-                    if (!needStop(currentScript.block.block, -1, 0)) {
+                    if (!needStop(currentScript.block.block, -1, 0, 0)) {
                         currentScript.x -= 1;
                         currentScript.fixPositionX();
                     }
                 }
                 if (Input.GetKeyDown("d")) {
-                    if (!needStop(currentScript.block.block, 1, 0)) {
+                    if (!needStop(currentScript.block.block, 1, 0, 0)) {
                         currentScript.x += 1;
                         currentScript.fixPositionX();
+                    }
+                }
+                if (Input.GetKeyDown("s")) {
+                    if (!needStop(currentScript.block.block, 0, 0, -1)) {
+                        currentScript.z -= 1;
+                        currentScript.fixPositionZ();
+                    }
+                }
+                if (Input.GetKeyDown("w")) {
+                    if (!needStop(currentScript.block.block, 0, 0, 1)) {
+                        currentScript.z += 1;
+                        currentScript.fixPositionZ();
                     }
                 }
             }

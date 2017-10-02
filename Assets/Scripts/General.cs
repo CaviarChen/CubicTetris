@@ -26,7 +26,7 @@ public class General : MonoBehaviour {
 
     public static Block[] generateBlockTemplate() {
            // --------------------
-        General.Block[] blocks = new General.Block[10];
+        General.Block[] blocks = new General.Block[11];
         blocks[0].block = new int[2, 4, 4] {
         {
             {0, 0, 0, 0},
@@ -198,6 +198,23 @@ public class General : MonoBehaviour {
 		};
 
 		blocks[9].size = 3;
+
+        blocks[10].block = new int[2, 4, 4] {
+            {
+                {1, 2, 0, 0},
+                {3, 4, 0, 0},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+            },
+            {
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+            }
+        };
+
+        blocks[10].size = 2;
         // --------------------
 
         return blocks;
