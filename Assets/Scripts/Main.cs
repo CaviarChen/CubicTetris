@@ -27,12 +27,10 @@ public class Main : MonoBehaviour
 
         addNewBlock();
 
-
-
     }
 
     void addNewBlock() {
-        currentBlockObject = createBlock(this.gameObject, blocks[9]);
+		currentBlockObject = createBlock(this.gameObject, blocks[0]);
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
         timeForNextCheck = General.timeForEachDrop;
         isMoving = true;
@@ -110,9 +108,8 @@ public class Main : MonoBehaviour
                 }
             }
         }
-
         currentScript.setCubeParent(FinishedCube);
-        Destroy(currentBlockObject);
+		transform.Find ("Main Camera").GetComponent<CameraShake> ().shake ();
     }
 
     int findFullRow() {
