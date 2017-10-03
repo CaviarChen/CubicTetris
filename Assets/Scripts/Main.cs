@@ -5,12 +5,14 @@ using UnityEngine;
 public class Main : MonoBehaviour
 {
     public GameObject blockPrefab;
+    public GameObject hintPrefab;
 
 
     public static General.Block[] blocks;
 
 
     public GameObject FinishedCube;
+    public GameObject GameArea;
     private GameObject[,,] space = new GameObject[2, General.length, General.height + 4];
 
 
@@ -21,6 +23,8 @@ public class Main : MonoBehaviour
     private bool allowRoate = true;
     private float timeForMovingAni;
 
+    private GameObject[,] hintboxes = new GameObject[2, 4];
+
 	// Use this for initialization
 	void Start () {
 
@@ -29,6 +33,67 @@ public class Main : MonoBehaviour
         addNewBlock();
 
     }
+
+
+
+    // hint boxes
+    void createHintBoxes() {
+
+        clearHintBoxes();
+
+        for (int i = 0; i < 2; i++) {
+            for (int k = 0; k < 4; k++) {
+
+                bool flag = false;
+
+                for (int j = 0; j < 4; j++) {
+                    if (currentScript.block.block[i, j, k] > 0) {
+                        flag = true;
+                        break;
+                    }
+                }
+
+                if (flag) {
+                    // need a hint box at [i,j]
+                    hintboxes[i, k] = Instantiate(hintPrefab);
+                    hintboxes[i, k].transform.SetParent(GameArea.transform);
+
+                    // actual position
+                    int x, y, z;
+                    x = (k + currentScript.x);
+                    z = (i + currentScript.z);
+
+                    //find first empty position
+                    for (y = General.height + 3; y >= 0; y--) {
+                        if (space[z, x, y] != null) {
+                            break;
+                        }
+                    }
+                    y += 1;
+
+                    hintboxes[i, k].transform.localPosition = new Vector3(x, y, z) * General.cubeSize;
+                    hintboxes[i, k].transform.localPosition += new Vector3(0.0f, -0.2f, 0.0f);
+
+                    
+                }
+            }
+        }
+        
+    }
+
+    void clearHintBoxes() {
+        for (int i = 0; i < 2; i++) {
+            for (int k = 0; k < 4; k++) {
+                if (hintboxes[i, k] != null) {
+                    Destroy(hintboxes[i, k]);
+                    hintboxes[i, k] = null;
+                }
+            }
+        }
+        
+    }
+
+    // ----------
 
     void addNewBlock() {
 
@@ -48,6 +113,7 @@ public class Main : MonoBehaviour
         currentScript.fixPositionX();
 
 
+        createHintBoxes();
 
         timeForNextCheck = General.timeForEachDrop;
         isMoving = true;
@@ -71,7 +137,6 @@ public class Main : MonoBehaviour
 
         script.fixPositionX();
         script.fixPositionY();
-
 
 
 
@@ -251,29 +316,34 @@ public class Main : MonoBehaviour
 
                 if (Input.GetKeyDown("space") && allowRoate) {
 					currentScript.rotateRight(this);
+                    createHintBoxes();
                 }
                 if (Input.GetKeyDown("a")) {
                     if (!needStop(currentScript.block.block, -1, 0, 0)) {
                         currentScript.x -= 1;
                         currentScript.fixPositionX();
+                        createHintBoxes();
                     }
                 }
                 if (Input.GetKeyDown("d")) {
                     if (!needStop(currentScript.block.block, 1, 0, 0)) {
                         currentScript.x += 1;
                         currentScript.fixPositionX();
+                        createHintBoxes();
                     }
                 }
                 if (Input.GetKeyDown("s")) {
                     if (!needStop(currentScript.block.block, 0, 0, -1)) {
                         currentScript.z -= 1;
                         currentScript.fixPositionZ();
+                        createHintBoxes();
                     }
                 }
                 if (Input.GetKeyDown("w")) {
                     if (!needStop(currentScript.block.block, 0, 0, 1)) {
                         currentScript.z += 1;
                         currentScript.fixPositionZ();
+                        createHintBoxes();
                     }
                 }
             }
