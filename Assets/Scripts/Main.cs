@@ -250,7 +250,7 @@ public class Main : MonoBehaviour
 
 
                 if (Input.GetKeyDown("space") && allowRoate) {
-                    currentScript.rotateRight(this);
+					currentScript.rotateRight(this);
                 }
                 if (Input.GetKeyDown("a")) {
                     if (!needStop(currentScript.block.block, -1, 0, 0)) {

@@ -52,3 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubePrefab: {fileID: 1038381184100972, guid: cdcc66d5bd50e90459da879b5e0d1da5, type: 2}
+  x: 0
+  y: 0
+  z: 0
+  xMax: 0
+  xMin: 0
+  cubes: []

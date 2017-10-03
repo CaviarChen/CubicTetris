@@ -8,26 +8,18 @@ public class CameraShake : MonoBehaviour {
 
 	public float shakeLevel = 3f;
 	public float setShakeTime = 0.2f;
-	public float shakeFps = 45f;
 
-	private float fps;
 	private float shakeTime = 0.0f;
-	private float frameTime = 0.0f;
 	private float shakeDelta = 0.005f;
 	private Camera mainCamera;
 
-	void Awake()
-	{
-		
-	}
+	private int count = 5;
 
 	// Use this for initialization
 	void Start()
 	{
 		mainCamera = GetComponent<Camera>();
 		shakeTime = setShakeTime;
-		fps = shakeFps;
-		frameTime = 0.03f;
 		shakeDelta = 0.005f;
 	}
 
@@ -44,17 +36,16 @@ public class CameraShake : MonoBehaviour {
 					mainCamera.rect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
 					isshakeCamera = false;
 					shakeTime = setShakeTime;
-					fps = shakeFps;
-					frameTime = 0.03f;
 					shakeDelta = 0.005f;
 				}
 				else
 				{
-					frameTime += Time.deltaTime;
-
-					if (frameTime > 1.0 / fps)
+					if (count <= 5)
 					{
-						frameTime = 0;
+						count--;
+						if (count == 0) {
+							count = 5;
+						}
 						mainCamera.rect = new Rect(shakeDelta * (-1.0f + shakeLevel * Random.value), shakeDelta * (-1.0f + shakeLevel * Random.value), 1.0f, 1.0f);
 					}
 				}

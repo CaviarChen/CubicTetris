@@ -25,7 +25,7 @@ public class CameraMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float angle = calculateAngle ();
-		print (angle);
+		//print (angle);
 		if (angle < 0) {
 			if (Input.GetAxis ("Mouse X") < 0 && angle > -135 && flipped == false) {
 				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
@@ -83,7 +83,7 @@ public class CameraMovement : MonoBehaviour {
 	float calculateAngle(){
 		float dot;
 		Vector3 v1 = gameObject.transform.position;
-		print ("camera position is at "+v1);
+		//print ("camera position is at "+v1);
 		Vector3 v2 = centrePoint;
 		//print ("centre position is at "+v2);
 		dot = Vector3.Dot (v1,v2);
