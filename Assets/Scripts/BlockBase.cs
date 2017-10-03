@@ -109,7 +109,8 @@ public class BlockBase : MonoBehaviour {
         }
 
         if (mainScript.needStop(newBlock, 0, 0, 0)) {
-            return;
+			GameObject.Find("Main Camera").GetComponent<CameraShake> ().shake ();
+			return;
         }
 
         block.block = newBlock;
