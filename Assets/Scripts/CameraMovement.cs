@@ -24,42 +24,45 @@ public class CameraMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		//transform.RotateAround(Vector3.zero, Vector3.left, 20 * Time.deltaTime);
+
+
 		float angle = calculateAngle ();
+		float updownangle = calculateUpDownAngle ();
 		//print (angle);
-		if (angle < 0) {
-			if (Input.GetAxis ("Mouse X") < 0 && angle > -135 && flipped == false) {
-				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
-			} else if (Input.GetAxis ("Mouse X") > 0 && angle < -45 && flipped == false) {
-				transform.RotateAround (centrePoint, Vector3.down, speed * Time.deltaTime);
-			}
-			if (angle < -100) {
-				transform.RotateAround (centrePoint, Vector3.down, 0.5f*speed * Time.deltaTime);
-			}else if (angle > -80) {
-				transform.RotateAround (centrePoint, Vector3.up, 0.5f*speed * Time.deltaTime);
-			}
-		} else {
-			if (Input.GetAxis ("Mouse X") < 0 && angle > 45 && flipped == true) {
-				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
-			}
-			else if (Input.GetAxis ("Mouse X") > 0 && angle < 135 && flipped == true) {
-				transform.RotateAround (centrePoint, Vector3.down, speed * Time.deltaTime);
-			}
-			if (angle < 80) {
-				transform.RotateAround (centrePoint, Vector3.down, 0.5f * speed * Time.deltaTime);
-			} else if (angle > 1) {
-				transform.RotateAround (centrePoint, Vector3.up, 0.5f*speed * Time.deltaTime);
-			}
+		print(updownangle);
+//		if (angle < 0) {
+//			if (Input.GetAxis ("Mouse X") < 0 && angle > -135 && flipped == false) {
+//				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
+//			} else if (Input.GetAxis ("Mouse X") > 0 && angle < -45 && flipped == false) {
+//				transform.RotateAround (centrePoint, Vector3.down, speed * Time.deltaTime);
+//			}
+//			if (angle < -120) {
+//				transform.RotateAround (centrePoint, Vector3.down, 0.5f*speed * Time.deltaTime);
+//			}else if (angle > -60) {
+//				transform.RotateAround (centrePoint, Vector3.up, 0.5f*speed * Time.deltaTime);
+//			}
+//		} else {
+//			if (Input.GetAxis ("Mouse X") < 0 && angle > 45 && flipped == true) {
+//				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
+//			}
+//			else if (Input.GetAxis ("Mouse X") > 0 && angle < 135 && flipped == true) {
+//				transform.RotateAround (centrePoint, Vector3.down, speed * Time.deltaTime);
+//			}
+//			if (angle < 60) {
+//				transform.RotateAround (centrePoint, Vector3.down, 0.5f * speed * Time.deltaTime);
+//			} else if (angle > 120) {
+//				transform.RotateAround (centrePoint, Vector3.up, 0.5f*speed * Time.deltaTime);
+//			}
+//		}
+
+		if (Input.GetAxis ("Mouse Y") > 0 ) {
+			transform.RotateAround (centrePoint,Vector3.left, speed * Time.deltaTime);
 		}
-
-
-
-
-
-
-
-
-
-
+		else if (Input.GetAxis ("Mouse Y") < 0) {
+			transform.RotateAround (centrePoint,Vector3.right, speed * Time.deltaTime);
+		}
 
 
 		if (Input.GetKeyDown (KeyCode.Z)) {
@@ -70,19 +73,32 @@ public class CameraMovement : MonoBehaviour {
 				flipped = true;
 			}
 		}
-		//gameObject.transform.LookAt (centre.transform);
-//		else if (Input.GetAxis ("Mouse Y") > 0) {
-//			transform.RotateAround (Vector3.zero, Vector3.left, speed * Time.deltaTime);
-//		}else if (Input.GetAxis ("Mouse Y") > 0) {
-//			transform.RotateAround (Vector3.zero, Vector3.right, speed * Time.deltaTime);
-//		}
+		gameObject.transform.LookAt (centrePoint);
+
 	}
 
+	float calculateUpDownAngle(){
+		float dot;
+		Vector3 v1 = new Vector3(centrePoint.x,gameObject.transform.position.y,gameObject.transform.position.z);
+//		print ("camera position is at "+v1);
+		Vector3 v2 = centrePoint;
+//		print ("centre position is at "+v2);
+		dot = Vector3.Dot (v1,v2);
+//		print ("dot between camera and centre is "+dot);
+		dot = dot / (v1.magnitude * v2.magnitude);
 
+		float angle = Mathf.Acos (dot) * 180 / Mathf.PI;
+
+		if (v1.z > 0) {
+			return angle;
+		} else {
+			return -angle;
+		}
+	}
 
 	float calculateAngle(){
 		float dot;
-		Vector3 v1 = gameObject.transform.position;
+		Vector3 v1 = new Vector3(gameObject.transform.position.x,centrePoint.y,gameObject.transform.position.z);
 		//print ("camera position is at "+v1);
 		Vector3 v2 = centrePoint;
 		//print ("centre position is at "+v2);
@@ -97,7 +113,6 @@ public class CameraMovement : MonoBehaviour {
 		} else {
 			return -angle;
 		}
-
-
+			
 	}
 }
