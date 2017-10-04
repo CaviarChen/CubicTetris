@@ -45,8 +45,8 @@ public class Main : MonoBehaviour
             for (int k = 0; k < 4; k++) {
 
                 bool flag = false;
-
-                for (int j = 0; j < 4; j++) {
+                int j;
+                for (j = 0; j < 4; j++) {
                     if (currentScript.block.block[i, j, k] > 0) {
                         flag = true;
                         break;
@@ -54,7 +54,7 @@ public class Main : MonoBehaviour
                 }
 
                 if (flag) {
-                    // need a hint box at [i,j]
+                    // need a hint box at [i, k]
                     hintboxes[i, k] = Instantiate(hintPrefab);
                     hintboxes[i, k].transform.SetParent(GameArea.transform);
 
@@ -64,7 +64,7 @@ public class Main : MonoBehaviour
                     z = (i + currentScript.z);
 
                     //find first empty position
-                    for (y = General.height + 3; y >= 0; y--) {
+                    for (y = j + currentScript.y; y >= 0; y--) {
                         if (space[z, x, y] != null) {
                             break;
                         }
@@ -99,7 +99,7 @@ public class Main : MonoBehaviour
 
         // random block
         currentBlockObject = createBlock(this.gameObject, blocks[Random.Range(0, blocks.Length)]);
-//		currentBlockObject = createBlock(this.gameObject, blocks[0]);
+		//currentBlockObject = createBlock(this.gameObject, blocks[8]);
 
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
         // random pos
@@ -277,6 +277,7 @@ public class Main : MonoBehaviour
                     currentScript.fixPositionY();
                     isMoving = false;
                     finishCurrentBlock();
+                    clearHintBoxes();
                     cleanFullRow();
                     addNewBlock();
                 } else {
