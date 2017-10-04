@@ -99,6 +99,7 @@ public class Main : MonoBehaviour
 
         // random block
         currentBlockObject = createBlock(this.gameObject, blocks[Random.Range(0, blocks.Length)]);
+//		currentBlockObject = createBlock(this.gameObject, blocks[0]);
 
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
         // random pos
