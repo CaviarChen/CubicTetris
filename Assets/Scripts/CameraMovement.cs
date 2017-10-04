@@ -32,30 +32,30 @@ public class CameraMovement : MonoBehaviour {
 		float updownangle = calculateUpDownAngle ();
 		//print (angle);
 		print(updownangle);
-//		if (angle < 0) {
-//			if (Input.GetAxis ("Mouse X") < 0 && angle > -135 && flipped == false) {
-//				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
-//			} else if (Input.GetAxis ("Mouse X") > 0 && angle < -45 && flipped == false) {
-//				transform.RotateAround (centrePoint, Vector3.down, speed * Time.deltaTime);
-//			}
-//			if (angle < -120) {
-//				transform.RotateAround (centrePoint, Vector3.down, 0.5f*speed * Time.deltaTime);
-//			}else if (angle > -60) {
-//				transform.RotateAround (centrePoint, Vector3.up, 0.5f*speed * Time.deltaTime);
-//			}
-//		} else {
-//			if (Input.GetAxis ("Mouse X") < 0 && angle > 45 && flipped == true) {
-//				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
-//			}
-//			else if (Input.GetAxis ("Mouse X") > 0 && angle < 135 && flipped == true) {
-//				transform.RotateAround (centrePoint, Vector3.down, speed * Time.deltaTime);
-//			}
-//			if (angle < 60) {
-//				transform.RotateAround (centrePoint, Vector3.down, 0.5f * speed * Time.deltaTime);
-//			} else if (angle > 120) {
-//				transform.RotateAround (centrePoint, Vector3.up, 0.5f*speed * Time.deltaTime);
-//			}
-//		}
+		if (angle < 0) {
+			if (Input.GetAxis ("Mouse X") < 0 && angle > -135 && flipped == false) {
+				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
+			} else if (Input.GetAxis ("Mouse X") > 0 && angle < -45 && flipped == false) {
+				transform.RotateAround (centrePoint, Vector3.down, speed * Time.deltaTime);
+			}
+			if (angle < -120) {
+				transform.RotateAround (centrePoint, Vector3.down, 0.5f*speed * Time.deltaTime);
+			}else if (angle > -60) {
+				transform.RotateAround (centrePoint, Vector3.up, 0.5f*speed * Time.deltaTime);
+			}
+		} else {
+			if (Input.GetAxis ("Mouse X") < 0 && angle > 45 && flipped == true) {
+				transform.RotateAround (centrePoint, Vector3.up, speed * Time.deltaTime);
+			}
+			else if (Input.GetAxis ("Mouse X") > 0 && angle < 135 && flipped == true) {
+				transform.RotateAround (centrePoint, Vector3.down, speed * Time.deltaTime);
+			}
+			if (angle < 60) {
+				transform.RotateAround (centrePoint, Vector3.down, 0.5f * speed * Time.deltaTime);
+			} else if (angle > 120) {
+				transform.RotateAround (centrePoint, Vector3.up, 0.5f*speed * Time.deltaTime);
+			}
+		}
 
 		if (Input.GetAxis ("Mouse Y") > 0 ) {
 			transform.RotateAround (centrePoint,Vector3.left, speed * Time.deltaTime);
