@@ -10,18 +10,20 @@ public class Main : MonoBehaviour
 
     public static General.Block[] blocks;
 
-
+    public GameObject NextBlock;
     public GameObject FinishedCube;
     public GameObject GameArea;
     private GameObject[,,] space = new GameObject[2, General.length, General.height + 4];
 
 
     private GameObject currentBlockObject;
+    private GameObject currentNextBlockObject = null;
     private BlockBase currentScript;
     private float timeForNextCheck;
     private bool isMoving = false;
     private bool allowRoate = true;
     private float timeForMovingAni;
+    private int nextBlockId;
 
     private GameObject[,] hintboxes = new GameObject[2, 4];
 
@@ -30,7 +32,8 @@ public class Main : MonoBehaviour
 
         blocks = General.generateBlockTemplate();
 
-        addNewBlock();
+        nextBlockId = Random.Range(0, blocks.Length);
+        addNextBlock();
 
     }
 
@@ -95,10 +98,10 @@ public class Main : MonoBehaviour
 
     // ----------
 
-    void addNewBlock() {
+    void addNextBlock() {
 
         // random block
-        currentBlockObject = createBlock(this.gameObject, blocks[Random.Range(0, blocks.Length)]);
+        currentBlockObject = createBlock(this.gameObject, blocks[nextBlockId]);
 		//currentBlockObject = createBlock(this.gameObject, blocks[8]);
 
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
@@ -119,6 +122,15 @@ public class Main : MonoBehaviour
         timeForNextCheck = General.timeForEachDrop;
         isMoving = true;
         allowRoate = true;
+
+        if (currentNextBlockObject != null) {
+            Destroy(currentNextBlockObject);
+        }
+
+        nextBlockId = Random.Range(0, blocks.Length);
+        currentNextBlockObject = createBlock(this.gameObject, blocks[nextBlockId]);
+        currentNextBlockObject.transform.parent = NextBlock.transform;
+        currentNextBlockObject.transform.localPosition = new Vector3(0, 0, 0);
 
     }
 
@@ -279,7 +291,7 @@ public class Main : MonoBehaviour
                     finishCurrentBlock();
                     clearHintBoxes();
                     cleanFullRow();
-                    addNewBlock();
+                    addNextBlock();
                 } else {
                     currentScript.y -= 1;
                     timeForMovingAni = 0;
