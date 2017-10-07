@@ -8,7 +8,7 @@ public class CameraMovement : MonoBehaviour {
 	//private float dot;
 //	private Vector3 centrePoint;
 
-	private bool flipped = false;
+	private int flipped = -1;
 	//flipped = false, A left movement, D right movement 
 	//flipper = true, A right movement, D left movement
 
@@ -21,8 +21,9 @@ public class CameraMovement : MonoBehaviour {
 	private double left_bound = 0.3;
 	private double right_bound = -0.3;
 	private int front;
+	private float offset = 5.0f;
 
-	public bool isFlipped(){
+	public int isFlipped(){
 		return flipped;
 	}
 
@@ -45,10 +46,18 @@ public class CameraMovement : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update(){
+		print (transform.eulerAngles.y);
 		if (transform.position.z < 0) {
 			front = 1;
 		} else {
 			front = -1;
+		}
+
+		if (Input.GetKeyDown (KeyCode.Z)) {
+			float z = -transform.position.z;
+			transform.position = new Vector3 (transform.position.x,transform.position.y,z);
+			transform.LookAt (target_center);
+			flipped = -flipped;
 		}
 
 
@@ -82,11 +91,21 @@ public class CameraMovement : MonoBehaviour {
 		}	
 		direction = moveDirection (left, right, up, down);
 
-		if (direction == 0)   {
-//			print (transform.eulerAngles.y);
+		if (direction == 0
+			&& (checkValidRange(transform.eulerAngles.y,0.0f,30.0f) 
+				|| checkValidRange(transform.eulerAngles.y,320.0f,360.0f)
+				||checkValidRange(transform.eulerAngles.y,120.0f,230.0f))
+		)   
+		{
 			transform.RotateAround (target_center, new Vector3(0, target_center.y, 0), speed * Time.deltaTime);
 		
-		} else if (direction == 1) {
+		} 
+		else if (direction == 1 
+			&& (checkValidRange(transform.eulerAngles.y,0.0f,40.0f) 
+				|| checkValidRange(transform.eulerAngles.y,330.0f,360.0f)
+				||checkValidRange(transform.eulerAngles.y,130.0f,240.0f))
+		) 
+		{
 //			print (transform.eulerAngles.y);
 			transform.RotateAround (target_center, new Vector3(0, -target_center.y, 0), speed * Time.deltaTime);
 		
@@ -103,10 +122,22 @@ public class CameraMovement : MonoBehaviour {
 			print ("Error");
 		}
 
+
+
 		transform.LookAt(target_center);
 
 	}
+		
 
+	bool checkValidRange(float i,float lowbound,float upperbound){
+		if (i >= lowbound && i <= upperbound) {
+			print ("true");
+			return true;
+		}
+		print ("false");
+		return false;
+		
+	}
 
 
 
