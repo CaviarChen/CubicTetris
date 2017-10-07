@@ -27,6 +27,7 @@ public class Main : MonoBehaviour
     private bool allowRoate = true;
     private float timeForMovingAni;
     private int nextBlockId;
+    private float currentTimeForEachDrop;
 
     private GameObject[,] hintboxes = new GameObject[2, 4];
 
@@ -124,7 +125,9 @@ public class Main : MonoBehaviour
 
         createHintBoxes();
 
-        timeForNextCheck = General.timeForEachDrop;
+        currentTimeForEachDrop = General.timeForEachDrop;
+        timeForNextCheck = currentTimeForEachDrop;
+
         isMoving = true;
         allowRoate = true;
 
@@ -136,6 +139,7 @@ public class Main : MonoBehaviour
         currentNextBlockObject = createBlock(this.gameObject, blocks[nextBlockId]);
         currentNextBlockObject.transform.parent = NextBlock.transform;
         currentNextBlockObject.transform.localPosition = new Vector3(0, 0, 0);
+
 
     }
 
@@ -273,6 +277,12 @@ public class Main : MonoBehaviour
 
     }
 
+    static void Swap<T>(ref T x, ref T y) {
+	    T t = y;
+	    y = x;
+	    x = t;
+    }
+
 
     void Update() {
         if (isMoving) {
@@ -288,7 +298,7 @@ public class Main : MonoBehaviour
 
 
             if (timeForNextCheck <= 0) {
-                timeForNextCheck += General.timeForEachDrop;
+                timeForNextCheck += currentTimeForEachDrop;
 
                 if (needStop(currentScript.block.block, 0, -1, 0)) {
                     currentScript.fixPositionY();
@@ -311,8 +321,6 @@ public class Main : MonoBehaviour
             } else {
 
 
-
-
                 if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0) {
                     float yChange = -General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
 
@@ -330,44 +338,71 @@ public class Main : MonoBehaviour
                 }
 
 
-				//cameraScript.isFlipped()
-				//1 : back, A = right movement, D =  left movement
-				//-1 : right A = left movement, D = right movement
-
-				int left = cameraScript.isFlipped ();
+                //cameraScript.isFlipped()
+                // 1 : back
+                //-1 : front
 
 
-                if (Input.GetKeyDown("space") && allowRoate) {
-					currentScript.rotateRight(this);
-                    createHintBoxes();
+                string dropKey = "space";
+                string leftKey = "a";
+                string rightKey = "d";
+                string upKey = "w";
+                string downKey = "s";
+                string leftRKey = "q";
+                string rightRKey = "e";
+
+                if (cameraScript.isFlipped() == 1) {
+                    Swap(ref leftKey, ref rightKey);
+                    Swap(ref upKey, ref downKey);
+                    Swap(ref leftRKey, ref rightRKey);
                 }
-                if (Input.GetKeyDown("a")) {
-						if (!needStop(currentScript.block.block, left, 0, 0)) {
-                        currentScript.x += left;
+
+                if (allowRoate) {
+                    if (Input.GetKeyDown(leftRKey)) {
+                        currentScript.rotateLeft(this);
+                        createHintBoxes();
+                    }
+                    if (Input.GetKeyDown(rightRKey)) {
+                        currentScript.rotateRight(this);
+                        createHintBoxes();
+                    }
+                }
+
+                if (Input.GetKeyDown(leftKey)) {
+                    if (!needStop(currentScript.block.block, -1, 0, 0)) {
+                        currentScript.x -= 1;
                         currentScript.fixPositionX();
                         createHintBoxes();
                     }
                 }
-                if (Input.GetKeyDown("d")) {
-					if (!needStop(currentScript.block.block, -left, 0, 0)) {
-                        currentScript.x -= left;
+
+                if (Input.GetKeyDown(rightKey)) {
+					if (!needStop(currentScript.block.block, 1, 0, 0)) {
+                        currentScript.x += 1;
                         currentScript.fixPositionX();
                         createHintBoxes();
                     }
                 }
-                if (Input.GetKeyDown("s")) {
+
+                if (Input.GetKeyDown(downKey)) {
                     if (!needStop(currentScript.block.block, 0, 0, -1)) {
                         currentScript.z -= 1;
                         currentScript.fixPositionZ();
                         createHintBoxes();
                     }
                 }
-                if (Input.GetKeyDown("w")) {
+
+                if (Input.GetKeyDown(upKey)) {
                     if (!needStop(currentScript.block.block, 0, 0, 1)) {
                         currentScript.z += 1;
                         currentScript.fixPositionZ();
                         createHintBoxes();
                     }
+                }
+
+                if (Input.GetKeyDown(dropKey)) {
+                    currentTimeForEachDrop = General.timeForEachMoveAni;
+                    timeForNextCheck = 0;
                 }
             }
 

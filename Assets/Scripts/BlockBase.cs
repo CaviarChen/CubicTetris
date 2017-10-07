@@ -119,6 +119,35 @@ public class BlockBase : MonoBehaviour {
         targetDegree -= 90;
     }
 
+    public void rotateLeft(Main mainScript) {
+
+        int[,,] newBlock = new int[2, 4, 4];
+
+
+        // make 3 Left Rotate
+      //  for (int n = 0; n < 3; n++) {
+            
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < block.size; j++) {
+                    for (int k = 0; k < block.size; k++) {
+                        newBlock[i, j, k] = block.block[i, block.size - k - 1, j];
+                    }
+                }
+            }
+
+      //  }
+
+        if (mainScript.needStop(newBlock, 0, 0, 0)) {
+            GameObject.Find("Main Camera").GetComponent<CameraShake>().shake();
+            return;
+        }
+
+        block.block = newBlock;
+
+
+        targetDegree += 90;
+    }
+
 
 	// Use this for initialization
 	void Start () {
