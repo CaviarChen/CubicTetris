@@ -16,6 +16,11 @@ public class Main : MonoBehaviour
     public GameObject NextBlock;
     public GameObject FinishedCube;
     public GameObject GameArea;
+
+
+    public Texture[] textures;
+
+
     private GameObject[,,] space = new GameObject[2, General.length, General.height + 4];
 
 
@@ -24,9 +29,9 @@ public class Main : MonoBehaviour
     private BlockBase currentScript;
     private float timeForNextCheck;
     private bool isMoving = false;
-    private bool allowRoate = true;
     private float timeForMovingAni;
     private int nextBlockId;
+    private int nextBlockTextureId;
     private float currentTimeForEachDrop;
     private bool isGameOver = false;
 
@@ -40,6 +45,7 @@ public class Main : MonoBehaviour
         blocks = General.generateBlockTemplate();
 
         nextBlockId = Random.Range(0, blocks.Length);
+        nextBlockTextureId = Random.Range(0, textures.Length);
         addNextBlock();
 
     }
@@ -108,7 +114,7 @@ public class Main : MonoBehaviour
     void addNextBlock() {
 
         // random block
-        currentBlockObject = createBlock(this.gameObject, blocks[nextBlockId]);
+        currentBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockTextureId);
 		//currentBlockObject = createBlock(this.gameObject, blocks[8]);
 
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
@@ -130,14 +136,13 @@ public class Main : MonoBehaviour
         timeForNextCheck = currentTimeForEachDrop;
 
         isMoving = true;
-        allowRoate = true;
-
         if (currentNextBlockObject != null) {
             Destroy(currentNextBlockObject);
         }
 
         nextBlockId = Random.Range(0, blocks.Length);
-        currentNextBlockObject = createBlock(this.gameObject, blocks[nextBlockId]);
+        nextBlockTextureId = Random.Range(0, textures.Length);
+        currentNextBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockTextureId);
         currentNextBlockObject.transform.parent = NextBlock.transform;
         currentNextBlockObject.transform.localPosition = new Vector3(0, 0, 0);
 
@@ -145,12 +150,12 @@ public class Main : MonoBehaviour
     }
 
 
-    GameObject createBlock(GameObject playArea, General.Block block) {
+    GameObject createBlock(GameObject playArea, General.Block block, int tid) {
         GameObject blockObject = Instantiate(blockPrefab);
         blockObject.transform.SetParent(playArea.transform);
         BlockBase script = (BlockBase) blockObject.GetComponent(typeof(BlockBase));
         script.block = block;
-        script.createCubes();
+        script.createCubes(this, tid);
         script.computeXRange();
 
 
@@ -282,7 +287,7 @@ public class Main : MonoBehaviour
     bool checkGameOver() {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < General.length; j++) {
-                if (space[i, j, General.height - 1] != null) {
+                if (space[i, j, General.height] != null) { // exceed General.height
                     return true;
                 }
             }
@@ -334,9 +339,6 @@ public class Main : MonoBehaviour
                 } else {
                     currentScript.y -= 1;
                     timeForMovingAni = 0;
-                    if (needStop(currentScript.block.block, 0, -1, 0)) {
-                        allowRoate = false;
-                    }
 
                 }
 
@@ -381,7 +383,7 @@ public class Main : MonoBehaviour
                     Swap(ref leftRKey, ref rightRKey);
                 }
 
-                if (allowRoate) {
+                if (!needStop(currentScript.block.block, 0, -1, 0)) {
                     if (Input.GetKeyDown(leftRKey)) {
                         currentScript.rotateLeft(this);
                         createHintBoxes();

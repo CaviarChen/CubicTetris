@@ -52,7 +52,7 @@ public class BlockBase : MonoBehaviour {
     }
 
 
-    public void createCubes() {
+    public void createCubes(Main mainScript, int tid) {
         GameObject blockObject = this.gameObject;
 
 	    for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
@@ -61,6 +61,7 @@ public class BlockBase : MonoBehaviour {
 
         cubes = new GameObject[4 * 4 * 2 + 1];
 
+
         for (int i = 0; i < 2; i++) {
 		    for (int j = 0; j < 4; j++) {
 			    for (int k = 0; k < 4; k++) {
@@ -68,6 +69,14 @@ public class BlockBase : MonoBehaviour {
 					    GameObject newCube = Instantiate(cubePrefab);
 				    	newCube.transform.SetParent(blockObject.transform);
                         newCube.transform.localPosition = new Vector3(k * General.cubeSize, j * General.cubeSize, i * General.cubeSize);
+
+                        newCube.transform.GetChild(0).GetComponent<Renderer>()
+                               .material.mainTexture = mainScript.textures[tid];
+                        newCube.transform.GetChild(1).GetComponent<Renderer>()
+                               .material.mainTexture = mainScript.textures[tid];
+
+
+
                         cubes[block.block[i, j, k]] = newCube;
 		    		}
                         
