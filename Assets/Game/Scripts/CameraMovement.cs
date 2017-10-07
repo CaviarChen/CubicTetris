@@ -17,6 +17,10 @@ public class CameraMovement : MonoBehaviour {
 	private GameObject floor;
 	private Vector3 cameraC_center;
 	private Vector3 target_center;
+	private Vector3 camera_start_position;
+	private Vector3 camera_back_position;
+	private Vector3 camera_reset_position;
+
 
 	private int front;
 	Vector3 velocity;
@@ -38,6 +42,9 @@ public class CameraMovement : MonoBehaviour {
 		floor = GameObject.FindGameObjectWithTag ("Floor");
 		cameraC_center = mainCamera.GetComponent<SphereCollider> ().center;
 		targetPosition = cameraC_center;
+		camera_start_position = mainCamera.transform.position;
+		camera_back_position = new Vector3 (camera_start_position.x,camera_start_position.y,(2*target_center.z -camera_start_position.z));
+		camera_reset_position = camera_back_position;
 		target_center = new Vector3(floor.GetComponent<BoxCollider> ().center.x,
 			floor.GetComponent<BoxCollider> ().center.y+3,
 			floor.GetComponent<BoxCollider> ().center.z);
@@ -50,9 +57,12 @@ public class CameraMovement : MonoBehaviour {
 		//print (mainCamera.transform.renderer.bounds.center);
 
 	}
+
+
 	// Update is called once per frame
 	void Update(){
-//		print (transform.position);
+//		print (transform.eulerAngles);
+//		print(cameraC_center.z);
 		if (transform.position.z < 0) {
 			front = 1;
 		} else {
@@ -60,9 +70,16 @@ public class CameraMovement : MonoBehaviour {
 		}
 
 		if (!ismovingback && Input.GetKeyDown (KeyCode.Z)) {
-			targetPosition = new Vector3 (-transform.position.x,transform.position.y,-transform.position.z);
 			ismovingback = true;
 			flipped = -flipped;
+			if (flipped == -1) {
+				targetPosition = camera_start_position;
+			} else {
+				targetPosition = camera_back_position;
+			}
+//			print (camera_start_position.z);
+//			print (target_center);
+
 		}
 
 
