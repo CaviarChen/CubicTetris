@@ -9,8 +9,8 @@ public class CameraMovement : MonoBehaviour {
 //	private Vector3 centrePoint;
 
 	private int flipped = -1;
-	//flipped = false, A left movement, D right movement 
-	//flipper = true, A right movement, D left movement
+	//flipped = -1, A left movement, D right movement 
+	//flipper = 1, A right movement, D left movement
 
 
 	private GameObject mainCamera;
@@ -46,7 +46,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update(){
-		print (transform.eulerAngles.y);
+//		print (transform.eulerAngles.y);
 		if (transform.position.z < 0) {
 			front = 1;
 		} else {
@@ -119,7 +119,7 @@ public class CameraMovement : MonoBehaviour {
 		} else if(direction == -1){
 			
 		}else {
-			print ("Error");
+//			print ("Error");
 		}
 
 

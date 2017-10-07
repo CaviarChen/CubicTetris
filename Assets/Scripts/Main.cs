@@ -7,6 +7,9 @@ public class Main : MonoBehaviour
     public GameObject blockPrefab;
     public GameObject hintPrefab;
 
+	public GameObject camera;
+	public CameraMovement cameraScript;
+
 
     public static General.Block[] blocks;
 
@@ -30,6 +33,8 @@ public class Main : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 
+		camera = GameObject.FindGameObjectWithTag ("MainCamera");
+		cameraScript = (CameraMovement)camera.GetComponent(typeof(CameraMovement));
         blocks = General.generateBlockTemplate();
 
         nextBlockId = Random.Range(0, blocks.Length);
@@ -324,6 +329,10 @@ public class Main : MonoBehaviour
                     timeForMovingAni = -1.0f;
                 }
 
+
+				//cameraScript.isFlipped()
+				//1 : back, A = right movement, D =  left movement
+				//-1 : right A = left movement, D = right movement
 
 
 
