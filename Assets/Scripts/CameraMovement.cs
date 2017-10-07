@@ -18,6 +18,9 @@ public class CameraMovement : MonoBehaviour {
 	private Vector3 cameraC_center;
 	private Vector3 target_center;
 	Vector3 lastMouseCoordinate = Vector3.zero;
+	private double left_bound = 0.3;
+	private double right_bound = -0.3;
+	private int front;
 
 	public bool isFlipped(){
 		return flipped;
@@ -42,6 +45,13 @@ public class CameraMovement : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update(){
+		if (transform.position.z < 0) {
+			front = 1;
+		} else {
+			front = -1;
+		}
+
+
 		int direction = -1;
 		bool change = false;
 		float left = 0.0f,right=0.0f,up=0.0f,down=0.0f;
@@ -72,17 +82,20 @@ public class CameraMovement : MonoBehaviour {
 		}	
 		direction = moveDirection (left, right, up, down);
 
-		if (direction == 0 && transform.rotation.y < 40) {
+		if (direction == 0)   {
+//			print (transform.eulerAngles.y);
 			transform.RotateAround (target_center, new Vector3(0, target_center.y, 0), speed * Time.deltaTime);
 		
-		} else if (direction == 1 && transform.rotation.y > -40) {
+		} else if (direction == 1) {
+//			print (transform.eulerAngles.y);
 			transform.RotateAround (target_center, new Vector3(0, -target_center.y, 0), speed * Time.deltaTime);
 		
 		} else if (direction == 2 && transform.position.y < 10) {
-			transform.RotateAround (target_center,new Vector3(target_center.x, 0, 0), speed * Time.deltaTime);		
+			transform.RotateAround (target_center, new Vector3 (front * target_center.x, 0, 0), speed * Time.deltaTime);	
+				
 		
-		} else if (direction == 3 && transform.position.y > 0) {
-			transform.RotateAround (target_center,new Vector3(-target_center.x, 0, 0), speed * Time.deltaTime);
+		} else if (direction == 3 && transform.position.y > 3) {
+			transform.RotateAround (target_center, new Vector3 (-front * target_center.x, 0, 0), speed * Time.deltaTime);
 		
 		} else if(direction == -1){
 			
@@ -92,9 +105,10 @@ public class CameraMovement : MonoBehaviour {
 
 		transform.LookAt(target_center);
 
-
-
 	}
+
+
+
 
 	int moveDirection(float left,float right,float up,float down){
 		float direction = Mathf.Max (left, right, up, down);
