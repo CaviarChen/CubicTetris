@@ -28,6 +28,7 @@ public class Main : MonoBehaviour
     private float timeForMovingAni;
     private int nextBlockId;
     private float currentTimeForEachDrop;
+    private bool isGameOver = false;
 
     private GameObject[,] hintboxes = new GameObject[2, 4];
 
@@ -277,6 +278,19 @@ public class Main : MonoBehaviour
 
     }
 
+
+    bool checkGameOver() {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < General.length; j++) {
+                if (space[i, j, General.height - 1] != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     static void Swap<T>(ref T x, ref T y) {
 	    T t = y;
 	    y = x;
@@ -285,6 +299,11 @@ public class Main : MonoBehaviour
 
 
     void Update() {
+        if (isGameOver) {
+            return;
+        }
+
+
         if (isMoving) {
 
 
@@ -306,6 +325,11 @@ public class Main : MonoBehaviour
                     finishCurrentBlock();
                     clearHintBoxes();
                     cleanFullRow();
+                    if (checkGameOver()) {
+                        isGameOver = true;
+                        print("GAME OVER!!!!");
+                        return;
+                    }
                     addNextBlock();
                 } else {
                     currentScript.y -= 1;
