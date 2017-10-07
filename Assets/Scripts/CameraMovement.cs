@@ -17,11 +17,12 @@ public class CameraMovement : MonoBehaviour {
 	private GameObject floor;
 	private Vector3 cameraC_center;
 	private Vector3 target_center;
-	Vector3 lastMouseCoordinate = Vector3.zero;
-	private double left_bound = 0.3;
-	private double right_bound = -0.3;
+
 	private int front;
-	private float offset = 5.0f;
+	Vector3 velocity;
+	Vector3 targetPosition;
+
+	private bool ismovingback = false;
 
 	public int isFlipped(){
 		return flipped;
@@ -36,6 +37,7 @@ public class CameraMovement : MonoBehaviour {
 		mainCamera = GameObject.Find ("Main Camera");
 		floor = GameObject.FindGameObjectWithTag ("Floor");
 		cameraC_center = mainCamera.GetComponent<SphereCollider> ().center;
+		targetPosition = cameraC_center;
 		target_center = new Vector3(floor.GetComponent<BoxCollider> ().center.x,
 			floor.GetComponent<BoxCollider> ().center.y+3,
 			floor.GetComponent<BoxCollider> ().center.z);
@@ -50,19 +52,32 @@ public class CameraMovement : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update(){
-		print (transform.eulerAngles.y);
+//		print (transform.position);
 		if (transform.position.z < 0) {
 			front = 1;
 		} else {
 			front = -1;
 		}
 
-		if (Input.GetKeyDown (KeyCode.Z)) {
-			float z = -transform.position.z;
-			transform.position = new Vector3 (transform.position.x,transform.position.y,z);
-			transform.LookAt (target_center);
+		if (!ismovingback && Input.GetKeyDown (KeyCode.Z)) {
+			targetPosition = new Vector3 (-(int)transform.position.x,(int)transform.position.y,-(int)transform.position.z);
+			ismovingback = true;
 			flipped = -flipped;
 		}
+
+
+		if (transform.position == targetPosition) {
+			ismovingback = false;
+		}
+
+		if (ismovingback) {
+			transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity,0.1f);
+			transform.LookAt (target_center);
+			return;
+		}
+
+			
+
 
 
 		int direction = -1;
@@ -117,16 +132,16 @@ public class CameraMovement : MonoBehaviour {
 
 		//offset
 
-		if (transform.eulerAngles.y > 40.0f && transform.eulerAngles.y < 60.0f) {
+		if (transform.eulerAngles.y > 35.0f && transform.eulerAngles.y < 55.0f) {
 			transform.RotateAround (target_center, new Vector3 (0, -target_center.y, 0), offsetspeed * Time.deltaTime);
 		} 
-		else if (transform.eulerAngles.y > 300.0f && transform.eulerAngles.y < 320.0f) {
+		else if (transform.eulerAngles.y > 305.0f && transform.eulerAngles.y < 325.0f) {
 			transform.RotateAround (target_center, new Vector3 (0, target_center.y, 0), offsetspeed * Time.deltaTime);
 		} 
-		else if (transform.eulerAngles.y > 120.0f && transform.eulerAngles.y < 135.0f) {
+		else if (transform.eulerAngles.y > 125.0f && transform.eulerAngles.y < 145.0f) {
 			transform.RotateAround (target_center, new Vector3 (0, target_center.y, 0), offsetspeed * Time.deltaTime);
 		} 
-		else if (transform.eulerAngles.y > 225.0f && transform.eulerAngles.y < 240.0f) {
+		else if (transform.eulerAngles.y > 215.0f && transform.eulerAngles.y < 235.0f) {
 			transform.RotateAround (target_center, new Vector3 (0, -target_center.y, 0), offsetspeed * Time.deltaTime);
 		}
 
