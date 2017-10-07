@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
 	//public GameObject centre;
-	public int speed;
+	public int speed = 100;
 	//private float dot;
 //	private Vector3 centrePoint;
 
@@ -12,7 +12,7 @@ public class CameraMovement : MonoBehaviour {
 	//flipped = -1, A left movement, D right movement 
 	//flipper = 1, A right movement, D left movement
 
-
+	private float offsetspeed;
 	private GameObject mainCamera;
 	private GameObject floor;
 	private Vector3 cameraC_center;
@@ -37,16 +37,17 @@ public class CameraMovement : MonoBehaviour {
 		floor = GameObject.FindGameObjectWithTag ("Floor");
 		cameraC_center = mainCamera.GetComponent<SphereCollider> ().center;
 		target_center = floor.GetComponent<BoxCollider> ().center;
+		offsetspeed = speed;
 
-		print (cameraC_center);
-		print (target_center);
+//		print (cameraC_center);
+//		print (target_center);
 
 		//print (mainCamera.transform.renderer.bounds.center);
 
 	}
 	// Update is called once per frame
 	void Update(){
-//		print (transform.eulerAngles.y);
+		print (transform.eulerAngles.y);
 		if (transform.position.z < 0) {
 			front = 1;
 		} else {
@@ -91,22 +92,13 @@ public class CameraMovement : MonoBehaviour {
 		}	
 		direction = moveDirection (left, right, up, down);
 
-		if (direction == 0
-			&& (checkValidRange(transform.eulerAngles.y,0.0f,30.0f) 
-				|| checkValidRange(transform.eulerAngles.y,320.0f,360.0f)
-				||checkValidRange(transform.eulerAngles.y,120.0f,230.0f))
-		)   
+		if (direction == 0 && canMove(transform.eulerAngles.y))   
 		{
 			transform.RotateAround (target_center, new Vector3(0, target_center.y, 0), speed * Time.deltaTime);
 		
 		} 
-		else if (direction == 1 
-			&& (checkValidRange(transform.eulerAngles.y,0.0f,40.0f) 
-				|| checkValidRange(transform.eulerAngles.y,330.0f,360.0f)
-				||checkValidRange(transform.eulerAngles.y,130.0f,240.0f))
-		) 
+		else if (direction == 1 && canMove(transform.eulerAngles.y))
 		{
-//			print (transform.eulerAngles.y);
 			transform.RotateAround (target_center, new Vector3(0, -target_center.y, 0), speed * Time.deltaTime);
 		
 		} else if (direction == 2 && transform.position.y < 10) {
@@ -116,25 +108,48 @@ public class CameraMovement : MonoBehaviour {
 		} else if (direction == 3 && transform.position.y > 3) {
 			transform.RotateAround (target_center, new Vector3 (-front * target_center.x, 0, 0), speed * Time.deltaTime);
 		
-		} else if(direction == -1){
-			
-		}else {
-//			print ("Error");
+		} else {
+//			print ("Error occur");
+		}
+
+		//offset
+
+		if (transform.eulerAngles.y > 40.0f && transform.eulerAngles.y < 60.0f) {
+			transform.RotateAround (target_center, new Vector3 (0, -target_center.y, 0), offsetspeed * Time.deltaTime);
+		} 
+		else if (transform.eulerAngles.y > 300.0f && transform.eulerAngles.y < 320.0f) {
+			transform.RotateAround (target_center, new Vector3 (0, target_center.y, 0), offsetspeed * Time.deltaTime);
+		} 
+		else if (transform.eulerAngles.y > 120.0f && transform.eulerAngles.y < 135.0f) {
+			transform.RotateAround (target_center, new Vector3 (0, target_center.y, 0), offsetspeed * Time.deltaTime);
+		} 
+		else if (transform.eulerAngles.y > 225.0f && transform.eulerAngles.y < 240.0f) {
+			transform.RotateAround (target_center, new Vector3 (0, -target_center.y, 0), offsetspeed * Time.deltaTime);
 		}
 
 
 
+			
 		transform.LookAt(target_center);
 
 	}
 		
 
-	bool checkValidRange(float i,float lowbound,float upperbound){
-		if (i >= lowbound && i <= upperbound) {
-			print ("true");
+	private bool canMove(float i){
+		if (checkValidRange (transform.eulerAngles.y, 0.0f, 45.0f)
+		   || checkValidRange (transform.eulerAngles.y, 315.0f, 360.0f)
+		   || checkValidRange (transform.eulerAngles.y, 135.0f, 225.0f)) {
 			return true;
 		}
-		print ("false");
+		return false;
+	}
+
+	private bool checkValidRange(float i,float lowbound,float upperbound){
+		if (i >= lowbound && i <= upperbound) {
+//			print ("true");
+			return true;
+		}
+//		print ("false");
 		return false;
 		
 	}
