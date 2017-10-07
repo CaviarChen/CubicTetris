@@ -334,7 +334,7 @@ public class Main : MonoBehaviour
 				//1 : back, A = right movement, D =  left movement
 				//-1 : right A = left movement, D = right movement
 
-
+				int left = cameraScript.isFlipped ();
 
 
                 if (Input.GetKeyDown("space") && allowRoate) {
@@ -342,15 +342,15 @@ public class Main : MonoBehaviour
                     createHintBoxes();
                 }
                 if (Input.GetKeyDown("a")) {
-                    if (!needStop(currentScript.block.block, -1, 0, 0)) {
-                        currentScript.x -= 1;
+						if (!needStop(currentScript.block.block, left, 0, 0)) {
+                        currentScript.x += left;
                         currentScript.fixPositionX();
                         createHintBoxes();
                     }
                 }
                 if (Input.GetKeyDown("d")) {
-                    if (!needStop(currentScript.block.block, 1, 0, 0)) {
-                        currentScript.x += 1;
+					if (!needStop(currentScript.block.block, -left, 0, 0)) {
+                        currentScript.x -= left;
                         currentScript.fixPositionX();
                         createHintBoxes();
                     }
