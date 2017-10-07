@@ -60,7 +60,7 @@ public class CameraMovement : MonoBehaviour {
 		}
 
 		if (!ismovingback && Input.GetKeyDown (KeyCode.Z)) {
-			targetPosition = new Vector3 (-(int)transform.position.x,(int)transform.position.y,-(int)transform.position.z);
+			targetPosition = new Vector3 (-transform.position.x,transform.position.y,-transform.position.z);
 			ismovingback = true;
 			flipped = -flipped;
 		}
