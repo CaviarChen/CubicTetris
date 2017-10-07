@@ -36,8 +36,11 @@ public class CameraMovement : MonoBehaviour {
 		mainCamera = GameObject.Find ("Main Camera");
 		floor = GameObject.FindGameObjectWithTag ("Floor");
 		cameraC_center = mainCamera.GetComponent<SphereCollider> ().center;
-		target_center = floor.GetComponent<BoxCollider> ().center;
+		target_center = new Vector3(floor.GetComponent<BoxCollider> ().center.x,
+			floor.GetComponent<BoxCollider> ().center.y+3,
+			floor.GetComponent<BoxCollider> ().center.z);
 		offsetspeed = speed;
+
 
 //		print (cameraC_center);
 //		print (target_center);
