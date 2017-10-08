@@ -37,12 +37,15 @@ public class Main : MonoBehaviour
 
     private GameObject[,] hintboxes = new GameObject[2, 4];
 
+	private GameObject canvas;
+
 	// Use this for initialization
 	void Start () {
 
 		camera = GameObject.FindGameObjectWithTag ("MainCamera");
 		cameraScript = (CameraMovement)camera.GetComponent(typeof(CameraMovement));
         blocks = General.generateBlockTemplate();
+		canvas = GameObject.Find ("Canvas");
 
         nextBlockId = Random.Range(0, blocks.Length);
         nextBlockTextureId = Random.Range(0, textures.Length);
@@ -302,140 +305,152 @@ public class Main : MonoBehaviour
 	    x = t;
     }
 
-
     void Update() {
         if (isGameOver) {
             return;
         }
 
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			if (Time.timeScale == 0) {
+				Time.timeScale = 1;
+				canvas.transform.Find("PauseMenuPanel").gameObject.SetActive(false);
+			} else {
+				Time.timeScale = 0;
+				canvas.transform.Find("PauseMenuPanel").gameObject.SetActive(true);
+			}
+		}
 
-        if (isMoving) {
-
-
-
-
-            //  currentBlockObject.transform.position +=
-            //      new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
-
-
-            timeForNextCheck -= Time.deltaTime;
-
-
-            if (timeForNextCheck <= 0) {
-                timeForNextCheck += currentTimeForEachDrop;
-
-                if (needStop(currentScript.block.block, 0, -1, 0)) {
-                    currentScript.fixPositionY();
-                    isMoving = false;
-                    finishCurrentBlock();
-                    clearHintBoxes();
-                    cleanFullRow();
-                    if (checkGameOver()) {
-                        isGameOver = true;
-                        print("GAME OVER!!!!");
-                        return;
-                    }
-                    addNextBlock();
-                } else {
-                    currentScript.y -= 1;
-                    timeForMovingAni = 0;
-
-                }
+		if (Time.timeScale != 0) {
+			if (isMoving) {
 
 
 
-            } else {
+
+				//  currentBlockObject.transform.position +=
+				//      new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
 
 
-                if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0) {
-                    float yChange = -General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
-
-                    timeForMovingAni += Time.deltaTime;
-
-                    yChange += General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
-                    currentBlockObject.transform.position
-                                      += new Vector3(0.0f, -yChange, 0.0f);
-
-                }
-
-                if (timeForMovingAni > General.timeForEachMoveAni) {
-                    currentScript.fixPositionY();
-                    timeForMovingAni = -1.0f;
-                }
+				timeForNextCheck -= Time.deltaTime;
 
 
-                //cameraScript.isFlipped()
-                // 1 : back
-                //-1 : front
+				if (timeForNextCheck <= 0) {
+					timeForNextCheck += currentTimeForEachDrop;
+
+					if (needStop (currentScript.block.block, 0, -1, 0)) {
+						currentScript.fixPositionY ();
+						isMoving = false;
+						finishCurrentBlock ();
+						clearHintBoxes ();
+						cleanFullRow ();
+						if (checkGameOver ()) {
+							isGameOver = true;
+							print ("GAME OVER!!!!");
+							return;
+						}
+						addNextBlock ();
+					} else {
+						currentScript.y -= 1;
+						timeForMovingAni = 0;
+
+					}
 
 
-                string dropKey = "space";
-                string leftKey = "a";
-                string rightKey = "d";
-                string upKey = "w";
-                string downKey = "s";
-                string leftRKey = "q";
-                string rightRKey = "e";
 
-                if (cameraScript.isFlipped() == 1) {
-                    Swap(ref leftKey, ref rightKey);
-                    Swap(ref upKey, ref downKey);
-                    Swap(ref leftRKey, ref rightRKey);
-                }
-
-                if (!needStop(currentScript.block.block, 0, -1, 0)) {
-                    if (Input.GetKeyDown(leftRKey)) {
-                        currentScript.rotateLeft(this);
-                        createHintBoxes();
-                    }
-                    if (Input.GetKeyDown(rightRKey)) {
-                        currentScript.rotateRight(this);
-                        createHintBoxes();
-                    }
-                }
-
-                if (Input.GetKeyDown(leftKey)) {
-                    if (!needStop(currentScript.block.block, -1, 0, 0)) {
-                        currentScript.x -= 1;
-                        currentScript.fixPositionX();
-                        createHintBoxes();
-                    }
-                }
-
-                if (Input.GetKeyDown(rightKey)) {
-					if (!needStop(currentScript.block.block, 1, 0, 0)) {
-                        currentScript.x += 1;
-                        currentScript.fixPositionX();
-                        createHintBoxes();
-                    }
-                }
-
-                if (Input.GetKeyDown(downKey)) {
-                    if (!needStop(currentScript.block.block, 0, 0, -1)) {
-                        currentScript.z -= 1;
-                        currentScript.fixPositionZ();
-                        createHintBoxes();
-                    }
-                }
-
-                if (Input.GetKeyDown(upKey)) {
-                    if (!needStop(currentScript.block.block, 0, 0, 1)) {
-                        currentScript.z += 1;
-                        currentScript.fixPositionZ();
-                        createHintBoxes();
-                    }
-                }
-
-                if (Input.GetKeyDown(dropKey)) {
-                    currentTimeForEachDrop = General.timeForEachMoveAni;
-                    timeForNextCheck = 0;
-                }
-            }
+				} else {
 
 
-        }
+					if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0) {
+						float yChange = -General.cubeSize * General.rubberBandFunction (timeForMovingAni / General.timeForEachMoveAni);
+
+						timeForMovingAni += Time.deltaTime;
+
+						yChange += General.cubeSize * General.rubberBandFunction (timeForMovingAni / General.timeForEachMoveAni);
+						currentBlockObject.transform.position
+	                                      += new Vector3 (0.0f, -yChange, 0.0f);
+
+					}
+
+					if (timeForMovingAni > General.timeForEachMoveAni) {
+						currentScript.fixPositionY ();
+						timeForMovingAni = -1.0f;
+					}
 
 
+					//cameraScript.isFlipped()
+					// 1 : back
+					//-1 : front
+
+
+					string dropKey = "space";
+					string leftKey = "a";
+					string rightKey = "d";
+					string upKey = "w";
+					string downKey = "s";
+					string leftRKey = "q";
+					string rightRKey = "e";
+
+
+					if (cameraScript.isFlipped () == 1) {
+						Swap (ref leftKey, ref rightKey);
+						Swap (ref upKey, ref downKey);
+						Swap (ref leftRKey, ref rightRKey);
+					}
+
+					if (!needStop (currentScript.block.block, 0, -1, 0)) {
+						if (Input.GetKeyDown (leftRKey)) {
+							currentScript.rotateLeft (this);
+							createHintBoxes ();
+						}
+						if (Input.GetKeyDown (rightRKey)) {
+							currentScript.rotateRight (this);
+							createHintBoxes ();
+						}
+					}
+
+					if (Input.GetKeyDown (leftKey)) {
+						if (!needStop (currentScript.block.block, -1, 0, 0)) {
+							currentScript.x -= 1;
+							currentScript.fixPositionX ();
+							createHintBoxes ();
+						}
+					}
+
+					if (Input.GetKeyDown (rightKey)) {
+						if (!needStop (currentScript.block.block, 1, 0, 0)) {
+							currentScript.x += 1;
+							currentScript.fixPositionX ();
+							createHintBoxes ();
+						}
+					}
+
+					if (Input.GetKeyDown (downKey)) {
+						if (!needStop (currentScript.block.block, 0, 0, -1)) {
+							currentScript.z -= 1;
+							currentScript.fixPositionZ ();
+							createHintBoxes ();
+						}
+					}
+
+					if (Input.GetKeyDown (upKey)) {
+						if (!needStop (currentScript.block.block, 0, 0, 1)) {
+							currentScript.z += 1;
+							currentScript.fixPositionZ ();
+							createHintBoxes ();
+						}
+					}
+
+					if (Input.GetKeyDown (dropKey)) {
+						currentTimeForEachDrop = General.timeForEachMoveAni;
+						timeForNextCheck = 0;
+					}
+
+
+				}
+
+
+			}
+
+		}
 
     }
 }
