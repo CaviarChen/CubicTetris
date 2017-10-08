@@ -384,7 +384,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &174995123
 Transform:
@@ -10923,8 +10923,6 @@ GameObject:
   - component: {fileID: 1884192639}
   - component: {fileID: 1884192641}
   - component: {fileID: 1884192640}
-  - component: {fileID: 1884192642}
-  - component: {fileID: 1884192643}
   m_Layer: 0
   m_Name: Tree_Palm_01 (2)
   m_TagString: Untagged
@@ -10987,30 +10985,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1884192638}
   m_Mesh: {fileID: 4300000, guid: c3296e31c8501a140b31eb0e32df35c6, type: 3}
---- !u!114 &1884192642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1884192638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cce8e2d857a84d418da8d49f0ad71c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camera: {fileID: 0}
---- !u!114 &1884192643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1884192638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cce8e2d857a84d418da8d49f0ad71c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camera: {fileID: 0}
 --- !u!1 &1914062825
 GameObject:
   m_ObjectHideFlags: 0
