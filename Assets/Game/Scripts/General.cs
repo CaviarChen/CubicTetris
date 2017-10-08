@@ -61,7 +61,7 @@ public class General : MonoBehaviour {
         }
         };
 
-        blocks[1].size = 2;
+        blocks[1].size = 3;
 
 		blocks[2].block = new int[2, 4, 4] {
 		{
