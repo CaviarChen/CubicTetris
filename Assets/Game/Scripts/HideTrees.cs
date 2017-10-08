@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class HideTrees : MonoBehaviour {
 
-	public GameObject camera;
+	private GameObject camerax;
 
 	// Use this for initialization
 	void Start () {
-		camera = GameObject.FindGameObjectWithTag ("MainCamera");
+		camerax = GameObject.FindGameObjectWithTag ("MainCamera");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (camera.transform.position.z < 0) {
+		if (camerax.transform.position.z < 0) {
 			GetComponent<MeshRenderer> ().enabled = true;
 		} else {
 			GetComponent<MeshRenderer> ().enabled = false;

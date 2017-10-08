@@ -149,6 +149,8 @@ public class Main : MonoBehaviour
         currentNextBlockObject.transform.parent = NextBlock.transform;
         currentNextBlockObject.transform.localPosition = new Vector3(0, 0, 0);
 
+        Score.addScore(5);
+
 
     }
 
@@ -249,12 +251,12 @@ public class Main : MonoBehaviour
 
     void cleanFullRow() {
 
+        int count = 0;
         while (true) {
             int row = findFullRow();
             if (row == -1) break;
 
-
-            Score.score += 100;
+            count++;
 
             // delete
             for (int i = 0; i < 2; i++) {
@@ -283,6 +285,8 @@ public class Main : MonoBehaviour
                 }
             }
         }
+
+        Score.addScore(count*100+10*count*count);
 
     }
 

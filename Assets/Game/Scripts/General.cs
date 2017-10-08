@@ -13,7 +13,7 @@ public class General : MonoBehaviour {
     // width is 2
     public static int length = 8;
     public static int height = 10;
-    public static float timeForEachDrop = 1.0f;
+    public static float timeForEachDrop = 1.5f;
     public static float timeForEachMoveAni = 0.2f;
     public static float rotateSpeed = 720.0f;  // degree per second
 
@@ -61,7 +61,7 @@ public class General : MonoBehaviour {
         }
         };
 
-        blocks[1].size = 2;
+        blocks[1].size = 3;
 
 		blocks[2].block = new int[2, 4, 4] {
 		{
