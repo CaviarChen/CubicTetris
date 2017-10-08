@@ -51,6 +51,10 @@ public class CameraMovement : MonoBehaviour {
 		offsetspeed = speed;
 
 
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+
 //		print (cameraC_center);
 //		print (target_center);
 
