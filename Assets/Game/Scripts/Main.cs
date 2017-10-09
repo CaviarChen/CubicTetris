@@ -138,6 +138,7 @@ public class Main : MonoBehaviour
 
         currentTimeForEachDrop = General.timeForEachDrop;
         timeForNextCheck = currentTimeForEachDrop;
+        timeForMovingAni = -1;
 
         isMoving = true;
         if (currentNextBlockObject != null) {

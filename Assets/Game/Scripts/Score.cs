@@ -6,7 +6,8 @@ using UnityEngine;
 public class Score : MonoBehaviour {
 
     public static int score;
-    public GameObject scoreText;
+    public GameObject scoreTextF;
+    public GameObject scoreTextB;
 
     private static ParticleSystem ps;
 
@@ -27,6 +28,7 @@ public class Score : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //scoreText.text = "Score: " + score.ToString();
-        scoreText.GetComponent<TextMesh>().text = "Score: " + score.ToString();
+        scoreTextF.GetComponent<TextMesh>().text = "Score: " + score.ToString();
+        scoreTextB.GetComponent<TextMesh>().text = "Score: " + score.ToString();
     }
 }

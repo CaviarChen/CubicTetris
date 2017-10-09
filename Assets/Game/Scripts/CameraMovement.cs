@@ -5,10 +5,12 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour {
 	//public GameObject centre;
 	public int speed = 100;
-	//private float dot;
-//	private Vector3 centrePoint;
+    public GameObject scoreTextF;
+    public GameObject scoreTextB;
+    //private float dot;
+    //	private Vector3 centrePoint;
 
-	private int flipped = -1;
+    private int flipped = -1;
 	//flipped = -1, A left movement, D right movement 
 	//flipper = 1, A right movement, D left movement
 
@@ -73,14 +75,19 @@ public class CameraMovement : MonoBehaviour {
 			front = -1;
 		}
 
-		if (!ismovingback && Input.GetKeyDown (KeyCode.Z)) {
+		if (!ismovingback && (Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))) {
 			ismovingback = true;
 			flipped = -flipped;
 			if (flipped == -1) {
 				targetPosition = camera_start_position;
-			} else {
+                scoreTextF.SetActive(true);
+                scoreTextB.SetActive(false);
+
+            } else {
 				targetPosition = camera_back_position;
-			}
+                scoreTextB.SetActive(true);
+                scoreTextF.SetActive(false);
+            }
 //			print (camera_start_position.z);
 //			print (target_center);
 
