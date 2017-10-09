@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
+	private GameObject gameArea;
+	private Main mainscript;
+
+
 	//public GameObject centre;
 	public int speed = 100;
     public GameObject scoreTextF;
@@ -22,6 +26,8 @@ public class CameraMovement : MonoBehaviour {
 	private Vector3 camera_start_position;
 	private Vector3 camera_back_position;
 	private Vector3 camera_reset_position;
+	private Vector3 camera_gameover_position;
+	private bool isGameOver = false;
 
 
 	private int front;
@@ -40,6 +46,8 @@ public class CameraMovement : MonoBehaviour {
 //	}
 
 	void Start(){
+		gameArea = GameObject.Find ("GameArea");
+		mainscript = (Main)gameArea.GetComponent (typeof(Main));
 		mainCamera = GameObject.Find ("Main Camera");
 		floor = GameObject.FindGameObjectWithTag ("Floor");
 		cameraC_center = mainCamera.GetComponent<SphereCollider> ().center;
@@ -47,12 +55,13 @@ public class CameraMovement : MonoBehaviour {
 		camera_start_position = mainCamera.transform.position;
 		camera_back_position = new Vector3 (camera_start_position.x,camera_start_position.y,(2*target_center.z -camera_start_position.z));
 		camera_reset_position = camera_back_position;
+		camera_gameover_position = new Vector3 (camera_start_position.x,40.0f,-40.0f);
 		target_center = new Vector3(floor.GetComponent<BoxCollider> ().center.x,
 			floor.GetComponent<BoxCollider> ().center.y+3,
 			floor.GetComponent<BoxCollider> ().center.z);
 		offsetspeed = speed;
 
-
+		isGameOver = false;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -67,6 +76,17 @@ public class CameraMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update(){
+		if (isGameOver) {
+			transform.position = Vector3.SmoothDamp(transform.position, camera_gameover_position, ref velocity,0.1f);
+			transform.LookAt (target_center);
+			return;
+		}
+		
+		if (mainscript.GameOver ()) {
+			isGameOver = true;
+			return;
+		}
+
 //		print (transform.eulerAngles);
 //		print(cameraC_center.z);
 		if (transform.position.z < 0) {
