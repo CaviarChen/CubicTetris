@@ -50,6 +50,7 @@ public class Main : MonoBehaviour
         nextBlockId = Random.Range(0, blocks.Length);
         nextBlockTextureId = Random.Range(0, textures.Length);
         addNextBlock();
+        Score.addScore(0);
 
     }
 
@@ -148,9 +149,6 @@ public class Main : MonoBehaviour
         currentNextBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockTextureId);
         currentNextBlockObject.transform.parent = NextBlock.transform;
         currentNextBlockObject.transform.localPosition = new Vector3(0, 0, 0);
-
-        Score.addScore(5);
-
 
     }
 
@@ -316,12 +314,13 @@ public class Main : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			if (Time.timeScale == 0) {
-				Time.timeScale = 1;
+				
 				canvas.transform.Find("PauseMenuPanel").gameObject.SetActive(false);
-			} else {
-				Time.timeScale = 0;
+                
+            } else {
 				canvas.transform.Find("PauseMenuPanel").gameObject.SetActive(true);
-			}
+
+            }
 		}
 
 		if (Time.timeScale != 0) {
@@ -351,7 +350,8 @@ public class Main : MonoBehaviour
 							print ("GAME OVER!!!!");
 							return;
 						}
-						addNextBlock ();
+                        Score.addScore(5);
+                        addNextBlock ();
 					} else {
 						currentScript.y -= 1;
 						timeForMovingAni = 0;

@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class Score : MonoBehaviour {
 
-    public static int score = 0;
-    public Text scoreText;
+    public static int score;
+    public GameObject scoreText;
 
     private static ParticleSystem ps;
 
     // Use this for initialization
     void Start () {
-
+        score = 0;
 	}
 
     public static void addScore(int s) {
@@ -26,7 +26,7 @@ public class Score : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        scoreText.text = "Score: " + score.ToString();
-
+        //scoreText.text = "Score: " + score.ToString();
+        scoreText.GetComponent<TextMesh>().text = "Score: " + score.ToString();
     }
 }

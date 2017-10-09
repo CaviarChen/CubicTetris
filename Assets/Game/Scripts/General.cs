@@ -9,13 +9,13 @@ public class General : MonoBehaviour {
 	    public int size;
     }
 
-    public static float cubeSize = 1.05f;
+    public static readonly float cubeSize = 1.05f;
     // width is 2
-    public static int length = 8;
-    public static int height = 10;
-    public static float timeForEachDrop = 1.5f;
-    public static float timeForEachMoveAni = 0.2f;
-    public static float rotateSpeed = 720.0f;  // degree per second
+    public static readonly int length = 8;
+    public static readonly int height = 10;
+    public static readonly float timeForEachDrop = 1.5f;
+    public static readonly float timeForEachMoveAni = 0.2f;
+    public static readonly float rotateSpeed = 720.0f;  // degree per second
 
 
     // takes x in [0,1] and return y in [0,1]
