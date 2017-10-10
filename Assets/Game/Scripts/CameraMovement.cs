@@ -11,7 +11,8 @@ public class CameraMovement : MonoBehaviour {
 	public int speed = 100;
     public GameObject scoreTextF;
     public GameObject scoreTextB;
-	public GameObject gameovertext;
+    public GameObject gameOverText;
+    public GameObject gameOverScoreText;
     //private float dot;
     //	private Vector3 centrePoint;
 
@@ -24,6 +25,7 @@ public class CameraMovement : MonoBehaviour {
 	private GameObject floor;
 	private Vector3 cameraC_center;
 	private Vector3 target_center;
+    private Vector3 gameOver_center;
 	private Vector3 camera_start_position;
 	private Vector3 camera_back_position;
 	private Vector3 camera_reset_position;
@@ -32,8 +34,9 @@ public class CameraMovement : MonoBehaviour {
 
 
 	private int front;
-	Vector3 velocity;
-	Vector3 targetPosition;
+	private Vector3 velocity;
+    private Vector3 velocity2;
+    private Vector3 targetPosition;
 
 	private bool ismovingback = false;
 
@@ -62,14 +65,15 @@ public class CameraMovement : MonoBehaviour {
 			floor.GetComponent<BoxCollider> ().center.z);
 		offsetspeed = speed;
 
-		isGameOver = false;
-		gameovertext.SetActive (false);
+        isGameOver = false;
+		gameOverText.SetActive (false);
+        gameOverScoreText.SetActive (false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        gameOver_center = target_center;
 
-//		print (cameraC_center);
-//		print (target_center);
+
 
 		//print (mainCamera.transform.renderer.bounds.center);
 
@@ -78,17 +82,24 @@ public class CameraMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update(){
-		if (isGameOver) {
-			transform.position = Vector3.SmoothDamp(transform.position, camera_gameover_position, ref velocity,0.5f);
-			transform.LookAt (target_center);
-			return;
-		}
-		
+
+        if (isGameOver) {
+            gameOver_center = Vector3.SmoothDamp(gameOver_center, gameOverText.transform.position + new Vector3(2, 0, -1), ref velocity2, 0.5f);
+            transform.position = Vector3.SmoothDamp(transform.position, camera_gameover_position, ref velocity, 0.5f);
+            transform.LookAt (gameOver_center);
+            return;
+        }
+
 		if (mainscript.GameOver ()) {
-			gameovertext.SetActive (true);
+			gameOverText.SetActive (true);
 			isGameOver = true;
+            scoreTextF.SetActive(false);
+            scoreTextB.SetActive(false);
+            gameOverScoreText.SetActive(true);
+            gameOverScoreText.GetComponent<TextMesh>().text = scoreTextF.GetComponent<TextMesh>().text;
 			return;
 		}
+        
 
 //		print (transform.eulerAngles);
 //		print(cameraC_center.z);

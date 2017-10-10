@@ -20,7 +20,7 @@ public class Score : MonoBehaviour {
         score += s;
         ps = GameObject.Find("Portal_Orb").GetComponent<ParticleSystem>();
         var main = ps.main;
-        main.startSize = (float)(score) / 100.0f;
+        main.startSize = (float)(score) / 150.0f;
     }
 
 
