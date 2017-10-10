@@ -61,7 +61,7 @@ public class Main : MonoBehaviour
         nextBlockId = Random.Range(0, blocks.Length);
         nextBlockTextureId = Random.Range(0, textures.Length);
         addNextBlock();
-        Score.addScore(0);
+        Score.init();
 
     }
 

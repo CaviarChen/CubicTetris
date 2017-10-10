@@ -11,9 +11,9 @@ public class Score : MonoBehaviour {
 
     private static ParticleSystem ps;
 
-    // Use this for initialization
+   
     void Start () {
-        score = 0;
+
 	}
 
     public static void addScore(int s) {
@@ -23,6 +23,11 @@ public class Score : MonoBehaviour {
         main.startSize = (float)(score) / 150.0f;
     }
 
+     // Use this for initialization
+    public static void init() {
+        score = 0;
+        addScore(0);
+    }
 
 	
 	// Update is called once per frame
