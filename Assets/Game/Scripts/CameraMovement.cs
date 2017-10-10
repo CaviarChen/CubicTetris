@@ -11,6 +11,7 @@ public class CameraMovement : MonoBehaviour {
 	public int speed = 100;
     public GameObject scoreTextF;
     public GameObject scoreTextB;
+	public GameObject gameovertext;
     //private float dot;
     //	private Vector3 centrePoint;
 
@@ -62,6 +63,7 @@ public class CameraMovement : MonoBehaviour {
 		offsetspeed = speed;
 
 		isGameOver = false;
+		gameovertext.SetActive (false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -77,12 +79,13 @@ public class CameraMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update(){
 		if (isGameOver) {
-			transform.position = Vector3.SmoothDamp(transform.position, camera_gameover_position, ref velocity,0.1f);
+			transform.position = Vector3.SmoothDamp(transform.position, camera_gameover_position, ref velocity,0.5f);
 			transform.LookAt (target_center);
 			return;
 		}
 		
 		if (mainscript.GameOver ()) {
+			gameovertext.SetActive (true);
 			isGameOver = true;
 			return;
 		}
