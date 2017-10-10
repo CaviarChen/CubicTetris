@@ -11,11 +11,13 @@ public class PauseMenu : MonoBehaviour {
     void OnDisable() {
         Time.timeScale = 1;
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void OnEnable() {
         Time.timeScale = 0;
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Update is called once per frame
