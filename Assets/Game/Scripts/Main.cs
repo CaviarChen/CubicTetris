@@ -458,4 +458,9 @@ public class Main : MonoBehaviour
 		}
 
     }
+
+
+	public bool GameOver(){
+		return isGameOver;
+	}
 }
