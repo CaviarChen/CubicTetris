@@ -310,6 +310,7 @@ public class Main : MonoBehaviour
 
     void Update() {
         if (isGameOver) {
+			canvas.transform.Find ("GameOverPanel").gameObject.SetActive (true);
             return;
         }
 
