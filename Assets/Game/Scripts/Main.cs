@@ -11,6 +11,10 @@ public class Main : MonoBehaviour
 	public CameraMovement cameraScript;
 
 
+	private GameObject particle;
+	private ParticleSystem particle_system;
+	private Vector3 particle_system_start_position;
+
     public static General.Block[] blocks;
 
     public GameObject NextBlock;
@@ -46,6 +50,13 @@ public class Main : MonoBehaviour
 		cameraScript = (CameraMovement)camera.GetComponent(typeof(CameraMovement));
         blocks = General.generateBlockTemplate();
 		canvas = GameObject.Find ("Canvas");
+
+		particle = GameObject.Find("Particle");
+		particle_system = (ParticleSystem)particle.GetComponent (typeof(ParticleSystem));
+		particle_system_start_position = particle.transform.position;
+		particle.SetActive (false);
+
+
 
         nextBlockId = Random.Range(0, blocks.Length);
         nextBlockTextureId = Random.Range(0, textures.Length);
@@ -249,6 +260,7 @@ public class Main : MonoBehaviour
 
 
     void cleanFullRow() {
+		
 
         int count = 0;
         while (true) {
@@ -261,6 +273,8 @@ public class Main : MonoBehaviour
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < General.length; j++) {
                     Destroy(space[i, j, row]);
+					particle.SetActive (true);
+					particle_system.Emit (1000);
                 }
             }
 
@@ -339,6 +353,8 @@ public class Main : MonoBehaviour
 
 
 				if (timeForNextCheck <= 0) {
+					particle.SetActive (false);
+					particle.transform.position = particle_system_start_position;
 					timeForNextCheck += currentTimeForEachDrop;
 
 					if (needStop (currentScript.block.block, 0, -1, 0)) {
