@@ -57,7 +57,7 @@ public class CameraMovement : MonoBehaviour {
 		cameraC_center = mainCamera.GetComponent<SphereCollider> ().center;
 		targetPosition = cameraC_center;
 		camera_start_position = mainCamera.transform.position;
-		camera_back_position = new Vector3 (camera_start_position.x,camera_start_position.y,(2*target_center.z -camera_start_position.z));
+		camera_back_position = new Vector3 (camera_start_position.x,10,(2*target_center.z -camera_start_position.z));
 		camera_reset_position = camera_back_position;
 		camera_gameover_position = new Vector3 (camera_start_position.x,40.0f,-40.0f);
 		target_center = new Vector3(floor.GetComponent<BoxCollider> ().center.x,
@@ -181,7 +181,7 @@ public class CameraMovement : MonoBehaviour {
 		{
 			transform.RotateAround (target_center, new Vector3(0, -target_center.y, 0), speed * Time.deltaTime);
 		
-		} else if (direction == 2 && transform.position.y < 10) {
+		} else if (direction == 2 && transform.position.y < 16) {
 			transform.RotateAround (target_center, new Vector3 (front * target_center.x, 0, 0), speed * Time.deltaTime);	
 				
 		
