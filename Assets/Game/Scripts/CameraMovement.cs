@@ -172,38 +172,55 @@ public class CameraMovement : MonoBehaviour {
 		}	
 		direction = moveDirection (left, right, up, down);
 
-		if (direction == 0 && canMove(transform.eulerAngles.y))   
-		{
-			transform.RotateAround (target_center, new Vector3(0, target_center.y, 0), speed * Time.deltaTime);
-		
-		} 
-		else if (direction == 1 && canMove(transform.eulerAngles.y))
-		{
-			transform.RotateAround (target_center, new Vector3(0, -target_center.y, 0), speed * Time.deltaTime);
-		
-		} else if (direction == 2 && transform.position.y < 16) {
-			transform.RotateAround (target_center, new Vector3 (front * target_center.x, 0, 0), speed * Time.deltaTime);	
-				
-		
-		} else if (direction == 3 && transform.position.y > 3) {
-			transform.RotateAround (target_center, new Vector3 (-front * target_center.x, 0, 0), speed * Time.deltaTime);
-		
-		} else {
-//			print ("Error occur");
-		}
+        //		if (direction == 0 && canMove(transform.eulerAngles.y))   
+        //		{
+        //			transform.RotateAround (target_center, new Vector3(0, target_center.y, 0), speed * Time.deltaTime);
 
-		//offset
+        //		} 
+        //		else if (direction == 1 && canMove(transform.eulerAngles.y))
+        //		{
+        //			transform.RotateAround (target_center, new Vector3(0, -target_center.y, 0), speed * Time.deltaTime);
 
-		if (transform.eulerAngles.y > 35.0f && transform.eulerAngles.y < 55.0f) {
+        //		} else if (direction == 2 && transform.position.y < 16) {
+        //			transform.RotateAround (target_center, new Vector3 (front * target_center.x, 0, 0), speed * Time.deltaTime);	
+
+
+        //		} else if (direction == 3 && transform.position.y > 3) {
+        //			transform.RotateAround (target_center, new Vector3 (-front * target_center.x, 0, 0), speed * Time.deltaTime);
+
+        //		} else {
+        ////			print ("Error occur");
+        //		}
+
+        if (canMove(transform.eulerAngles.y)) {
+            transform.RotateAround(target_center, new Vector3(0, target_center.y, 0), left * speed * Time.deltaTime);
+
+        }
+        if ( canMove(transform.eulerAngles.y)) {
+            transform.RotateAround(target_center, new Vector3(0, -target_center.y, 0), right * speed * Time.deltaTime);
+
+        }
+        if ( transform.position.y < 16) {
+            transform.RotateAround(target_center, new Vector3(front * target_center.x, 0, 0), up * speed * Time.deltaTime);
+
+        }
+        if (transform.position.y > 3) {
+            transform.RotateAround(target_center, new Vector3(-front * target_center.x, 0, 0), down * speed * Time.deltaTime);
+
+        }
+        //offset
+
+        while (transform.eulerAngles.y > 35.0f && transform.eulerAngles.y < 55.0f) {
 			transform.RotateAround (target_center, new Vector3 (0, -target_center.y, 0), offsetspeed * Time.deltaTime);
 		} 
-		else if (transform.eulerAngles.y > 305.0f && transform.eulerAngles.y < 325.0f) {
+
+		while (transform.eulerAngles.y > 305.0f && transform.eulerAngles.y < 325.0f) {
 			transform.RotateAround (target_center, new Vector3 (0, target_center.y, 0), offsetspeed * Time.deltaTime);
 		} 
-		else if (transform.eulerAngles.y > 125.0f && transform.eulerAngles.y < 145.0f) {
+		while (transform.eulerAngles.y > 125.0f && transform.eulerAngles.y < 145.0f) {
 			transform.RotateAround (target_center, new Vector3 (0, target_center.y, 0), offsetspeed * Time.deltaTime);
 		} 
-		else if (transform.eulerAngles.y > 215.0f && transform.eulerAngles.y < 235.0f) {
+		while (transform.eulerAngles.y > 215.0f && transform.eulerAngles.y < 235.0f) {
 			transform.RotateAround (target_center, new Vector3 (0, -target_center.y, 0), offsetspeed * Time.deltaTime);
 		}
 
