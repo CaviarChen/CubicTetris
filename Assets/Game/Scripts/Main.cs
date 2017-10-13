@@ -42,6 +42,7 @@ public class Main : MonoBehaviour
     private GameObject[,] hintboxes = new GameObject[2, 4];
 
 	private GameObject canvas;
+	private GameObject cameraPivot;
 
 	// Use this for initialization
 	void Start () {
@@ -50,6 +51,7 @@ public class Main : MonoBehaviour
 		cameraScript = (CameraMovement)camera.GetComponent(typeof(CameraMovement));
         blocks = General.generateBlockTemplate();
 		canvas = GameObject.Find ("Canvas");
+		cameraPivot = GameObject.Find ("CameraPivot");
 
 		particle = GameObject.Find("Particle");
 		particle_system = (ParticleSystem)particle.GetComponent (typeof(ParticleSystem));
@@ -231,7 +233,7 @@ public class Main : MonoBehaviour
             }
         }
         currentScript.setCubeParent(FinishedCube);
-		transform.Find ("Main Camera").GetComponent<CameraShake> ().shake ();
+		cameraPivot.transform.Find ("Main Camera").GetComponent<CameraShake> ().shake ();
     }
 
     int findFullRow() {
