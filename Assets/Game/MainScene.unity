@@ -2657,7 +2657,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 692512055}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13, y: 6.001727, z: 11.59}
+  m_LocalPosition: {x: 13, y: 6.001727, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2129169735}
@@ -2773,7 +2773,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 9113551
+  randomSeed: 28321522
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -5944,7 +5944,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: -925853130
+  randomSeed: 1015082011
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -9533,7 +9533,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1125331876}
   - {fileID: 1283862313}
   - {fileID: 1532401328}
   - {fileID: 1996876710}
@@ -9712,11 +9711,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1125331871}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.1, y: 3, z: -18}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.75, y: 0, z: -14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1054221709}
+  m_Father: {fileID: 1560718361}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1125331877
@@ -9730,7 +9729,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a42bc52b8eb8f463297275bc348fff23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 80
+  MouseSpeed: 4
+  OrbitDampening: 10
+  speed: 100
   scoreTextF: {fileID: 2026831992}
   scoreTextB: {fileID: 1535796433}
   gameOverText: {fileID: 1272361003}
@@ -10381,7 +10382,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1054221709}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1296090717
 GameObject:
@@ -10922,7 +10923,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1054221709}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1532401329
 MeshRenderer:
@@ -11206,6 +11207,35 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1560271262}
   m_Mesh: {fileID: 4300000, guid: 9309ffb9d4b52b84ca75d21dd909394d, type: 3}
+--- !u!1 &1560718360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1560718361}
+  m_Layer: 0
+  m_Name: CameraPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1560718361
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1560718360}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1125331876}
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1586483378
 GameObject:
   m_ObjectHideFlags: 0
@@ -11383,7 +11413,7 @@ Transform:
   m_LocalScale: {x: 0.09999999, y: 0.1, z: 0.10000002}
   m_Children: []
   m_Father: {fileID: 1054221709}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!102 &1596715747
 TextMesh:
@@ -12904,7 +12934,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1054221709}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!23 &1996876711
 MeshRenderer:
@@ -13102,7 +13132,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 660451336
+  randomSeed: 594870454
   InitialModule:
     serializedVersion: 3
     enabled: 1

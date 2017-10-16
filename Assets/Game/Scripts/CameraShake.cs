@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// http://www.jianshu.com/p/b8c1cd74ad88
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
