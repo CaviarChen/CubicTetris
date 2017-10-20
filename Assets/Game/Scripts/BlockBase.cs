@@ -117,7 +117,7 @@ public class BlockBase : MonoBehaviour {
             }
         }
 
-        if (mainScript.needStop(newBlock, 0, 0, 0)) {
+        if (mainScript.isMovePossible(newBlock, 0, 0, 0)) {
 			GameObject.Find("Main Camera").GetComponent<CameraShake> ().shake ();
 			return;
         }
@@ -146,7 +146,7 @@ public class BlockBase : MonoBehaviour {
 
       //  }
 
-        if (mainScript.needStop(newBlock, 0, 0, 0)) {
+        if (mainScript.isMovePossible(newBlock, 0, 0, 0)) {
             GameObject.Find("Main Camera").GetComponent<CameraShake>().shake();
             return;
         }

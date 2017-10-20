@@ -2,35 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Main : MonoBehaviour
-{
+public class Main : MonoBehaviour {
+    // prefabs
     public GameObject blockPrefab;
     public GameObject hintPrefab;
 
-	public GameObject camera;
-	public CameraMovement cameraScript;
-
-
-	private GameObject particle;
-	private ParticleSystem particle_system;
-	private Vector3 particle_system_start_position;
-
+    // block data
     public static General.Block[] blocks;
+
+    // cube textures
+    public Texture[] textures;
 
     public GameObject NextBlock;
     public GameObject FinishedCube;
     public GameObject GameArea;
 
 
-    public Texture[] textures;
 
 
+    // particle for canceling cubes
+    private GameObject particle;
+    private ParticleSystem particle_system;
+    private Vector3 particle_system_start_position;
+
+    // array for all cubes that are fixed
     private GameObject[,,] space = new GameObject[2, General.length, General.height + 4];
 
+    private CameraMovement cameraScript;
 
+    // current and next block
     private GameObject currentBlockObject;
     private GameObject currentNextBlockObject = null;
     private BlockBase currentScript;
+
     private float timeForNextCheck;
     private bool isMoving = false;
     private float timeForMovingAni;
@@ -39,27 +43,30 @@ public class Main : MonoBehaviour
     private float currentTimeForEachDrop;
     private bool isGameOver = false;
 
+    // array for hint boxes
     private GameObject[,] hintboxes = new GameObject[2, 4];
 
-	private GameObject canvas;
-	private GameObject cameraPivot;
+    private GameObject canvas;
+    private GameObject cameraPivot;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
+        GameObject camerax;
 
-		camera = GameObject.FindGameObjectWithTag ("MainCamera");
-		cameraScript = (CameraMovement)camera.GetComponent(typeof(CameraMovement));
+        // camera
+        camerax = GameObject.FindGameObjectWithTag("MainCamera");
+        cameraScript = (CameraMovement)camerax.GetComponent(typeof(CameraMovement));
         blocks = General.generateBlockTemplate();
-		canvas = GameObject.Find ("Canvas");
-		cameraPivot = GameObject.Find ("CameraPivot");
+        canvas = GameObject.Find("Canvas");
+        cameraPivot = GameObject.Find("CameraPivot");
 
-		particle = GameObject.Find("Particle");
-		particle_system = (ParticleSystem)particle.GetComponent (typeof(ParticleSystem));
-		particle_system_start_position = particle.transform.position;
-		particle.SetActive (false);
+        // particle system
+        particle = GameObject.Find("Particle");
+        particle_system = (ParticleSystem)particle.GetComponent(typeof(ParticleSystem));
+        particle_system_start_position = particle.transform.position;
+        particle.SetActive(false);
 
-
-
+        // init and set up the first block
         nextBlockId = Random.Range(0, blocks.Length);
         nextBlockTextureId = Random.Range(0, textures.Length);
         addNextBlock();
@@ -74,6 +81,7 @@ public class Main : MonoBehaviour
 
         clearHintBoxes();
 
+        // for every horizontal points
         for (int i = 0; i < 2; i++) {
             for (int k = 0; k < 4; k++) {
 
@@ -107,13 +115,14 @@ public class Main : MonoBehaviour
                     hintboxes[i, k].transform.localPosition = new Vector3(x, y, z) * General.cubeSize;
                     hintboxes[i, k].transform.localPosition += new Vector3(0.0f, -0.2f, 0.0f);
 
-                    
+
                 }
             }
         }
-        
+
     }
 
+    // destory all hint boxes
     void clearHintBoxes() {
         for (int i = 0; i < 2; i++) {
             for (int k = 0; k < 4; k++) {
@@ -123,32 +132,38 @@ public class Main : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
     // ----------
 
+
+    // add next block to the scene
     void addNextBlock() {
 
-        // random block
+        // create block
         currentBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockTextureId);
-		//currentBlockObject = createBlock(this.gameObject, blocks[8]);
-
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
+
         // random pos
         currentScript.x = Random.Range(currentScript.xMin, currentScript.xMax + 1);
-        
-        if (!needStop(currentScript.block.block, 0, 0, 1)) {
-            if(Random.Range(0,2)==1) {
+
+        if (!isMovePossible(currentScript.block.block, 0, 0, 1)) {
+            if (Random.Range(0, 2) == 1) {
                 currentScript.z += 1;
             }
         }
+        currentScript.y = General.height;
+
+        // fix position
         currentScript.fixPositionZ();
         currentScript.fixPositionX();
+        currentScript.fixPositionY();
 
 
         createHintBoxes();
 
+        // reset timer
         currentTimeForEachDrop = General.timeForEachDrop;
         timeForNextCheck = currentTimeForEachDrop;
         timeForMovingAni = -1;
@@ -158,6 +173,7 @@ public class Main : MonoBehaviour
             Destroy(currentNextBlockObject);
         }
 
+        // random pick next block
         nextBlockId = Random.Range(0, blocks.Length);
         nextBlockTextureId = Random.Range(0, textures.Length);
         currentNextBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockTextureId);
@@ -167,30 +183,21 @@ public class Main : MonoBehaviour
     }
 
 
+    // create a block
     GameObject createBlock(GameObject playArea, General.Block block, int tid) {
+
         GameObject blockObject = Instantiate(blockPrefab);
         blockObject.transform.SetParent(playArea.transform);
-        BlockBase script = (BlockBase) blockObject.GetComponent(typeof(BlockBase));
+        BlockBase script = (BlockBase)blockObject.GetComponent(typeof(BlockBase));
         script.block = block;
         script.createCubes(this, tid);
         script.computeXRange();
 
-
-        // temporary
-        script.x = script.xMin;
-        script.y = General.height;
-
-        script.fixPositionX();
-        script.fixPositionY();
-
-
-
         return blockObject;
     }
 
-    // Update is called once per frame1
-
-    bool isSpaceoccupied(int i, int j, int k) {
+    // is a point occupied by a fixed cube
+    bool isSpaceOccupied(int i, int j, int k) {
         if (!((0 <= i) && (i < 2))) return true;
         if (!((0 <= j) && (j < General.length))) return true;
         if (!((0 <= k) && (k < General.height + 4))) return true;
@@ -200,12 +207,13 @@ public class Main : MonoBehaviour
     }
 
 
-    public bool needStop(int[,,] block, int xOffset, int yOffset, int zOffset) {
+    public bool isMovePossible(int[,,] block, int xOffset, int yOffset, int zOffset) {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
-                    if (block[i,j,k]!=0) {
-                        if(isSpaceoccupied(i + currentScript.z + zOffset, k + currentScript.x + xOffset, j + currentScript.y + yOffset)) {
+                    if (block[i, j, k] != 0) {
+                        if (isSpaceOccupied(i + currentScript.z + zOffset, k + currentScript.x + xOffset,
+                                                                            j + currentScript.y + yOffset)) {
                             return true;
                         }
                     }
@@ -218,26 +226,34 @@ public class Main : MonoBehaviour
 
     }
 
+    // set all cubes of current block to fixed state
     void finishCurrentBlock() {
+
+        // fix position
         currentScript.fixPositionX();
         currentScript.fixPositionY();
 
-        // add to space
+
+        // add to space array
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
                     if (currentScript.block.block[i, j, k] != 0) {
-                        space[i + currentScript.z, k + currentScript.x, j + currentScript.y] = currentScript.cubes[currentScript.block.block[i, j, k]];
+                        space[i + currentScript.z, k + currentScript.x, j + currentScript.y] = 
+                                                currentScript.cubes[currentScript.block.block[i, j, k]];
                     }
                 }
             }
         }
+
         currentScript.setCubeParent(FinishedCube);
-		cameraPivot.transform.Find ("Main Camera").GetComponent<CameraShake> ().shake ();
+        cameraPivot.transform.Find("Main Camera").GetComponent<CameraShake>().shake();
     }
 
+    // find the first row that is full
     int findFullRow() {
         for (int k = 0; k < General.height; k++) {
+            
             // for each row
             bool rowFlag = true;
             for (int i = 0; i < 2; i++) {
@@ -250,7 +266,7 @@ public class Main : MonoBehaviour
                 if (!rowFlag) break;
             }
 
-            if(rowFlag) {
+            if (rowFlag) {
                 return k;
             }
 
@@ -261,10 +277,10 @@ public class Main : MonoBehaviour
     }
 
 
+    // clean all rows that are full
     void cleanFullRow() {
-		
-
         int count = 0;
+
         while (true) {
             int row = findFullRow();
             if (row == -1) break;
@@ -275,41 +291,45 @@ public class Main : MonoBehaviour
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < General.length; j++) {
                     Destroy(space[i, j, row]);
-					particle.SetActive (true);
-					particle_system.Emit (1000);
+                    particle.SetActive(true);
+                    particle_system.Emit(1000);
                 }
             }
 
             // fall
-            for (int k = row; k < General.height+4; k++) {
+            for (int k = row; k < General.height + 4; k++) {
                 // for each row
                 for (int i = 0; i < 2; i++) {
                     for (int j = 0; j < General.length; j++) {
-                        if(k==General.height+4-1) {
+                        if (k == General.height + 4 - 1) {
                             // clean top row
                             space[i, j, k] = null;
                         } else {
                             space[i, j, k] = space[i, j, k + 1];
-                            if (space[i,j,k]!=null) {
+                            if (space[i, j, k] != null) {
                                 space[i, j, k].transform.position -= new Vector3(0.0f, General.cubeSize, 0.0f);
-                            }                            
+                            }
                         }
-                        
+
 
                     }
                 }
             }
         }
 
-        Score.addScore(count*100+10*count*count);
+        // canceling mutiple rows at once is always better
+        Score.addScore(count * 100 + 10 * count * count);
 
     }
 
 
+    // check if the game is over
     bool checkGameOver() {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < General.length; j++) {
-                if (space[i, j, General.height] != null) { // exceed General.height
+                
+                // exceed General.height
+                if (space[i, j, General.height] != null) { 
                     return true;
                 }
             }
@@ -318,168 +338,169 @@ public class Main : MonoBehaviour
     }
 
 
+    // swap two variables
     static void Swap<T>(ref T x, ref T y) {
-	    T t = y;
-	    y = x;
-	    x = t;
+        T t = y;
+        y = x;
+        x = t;
     }
 
     void Update() {
         if (isGameOver) {
-			canvas.transform.Find ("GameOverPanel").gameObject.SetActive (true);
+            canvas.transform.Find("GameOverPanel").gameObject.SetActive(true);
             return;
         }
 
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			if (Time.timeScale == 0) {
-				
-				canvas.transform.Find("PauseMenuPanel").gameObject.SetActive(false);
-                
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (Time.timeScale == 0) {
+
+                canvas.transform.Find("PauseMenuPanel").gameObject.SetActive(false);
+
             } else {
-				canvas.transform.Find("PauseMenuPanel").gameObject.SetActive(true);
+                canvas.transform.Find("PauseMenuPanel").gameObject.SetActive(true);
 
             }
-		}
+        }
 
-		if (Time.timeScale != 0) {
-			if (isMoving) {
-
-
+        if (Time.timeScale != 0) {
+            if (isMoving) {
 
 
-				//  currentBlockObject.transform.position +=
-				//      new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
 
 
-				timeForNextCheck -= Time.deltaTime;
+                //  currentBlockObject.transform.position +=
+                //      new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
 
 
-				if (timeForNextCheck <= 0) {
-					particle.SetActive (false);
-					particle.transform.position = particle_system_start_position;
-					timeForNextCheck += currentTimeForEachDrop;
+                timeForNextCheck -= Time.deltaTime;
 
-					if (needStop (currentScript.block.block, 0, -1, 0)) {
-						currentScript.fixPositionY ();
-						isMoving = false;
-						finishCurrentBlock ();
-						clearHintBoxes ();
-						cleanFullRow ();
-						if (checkGameOver ()) {
-							isGameOver = true;
-							print ("GAME OVER!!!!");
-							return;
-						}
+
+                if (timeForNextCheck <= 0) {
+                    particle.SetActive(false);
+                    particle.transform.position = particle_system_start_position;
+                    timeForNextCheck += currentTimeForEachDrop;
+
+                    if (isMovePossible(currentScript.block.block, 0, -1, 0)) {
+                        currentScript.fixPositionY();
+                        isMoving = false;
+                        finishCurrentBlock();
+                        clearHintBoxes();
+                        cleanFullRow();
+                        if (checkGameOver()) {
+                            isGameOver = true;
+                            print("GAME OVER!!!!");
+                            return;
+                        }
                         Score.addScore(5);
-                        addNextBlock ();
-					} else {
-						currentScript.y -= 1;
-						timeForMovingAni = 0;
+                        addNextBlock();
+                    } else {
+                        currentScript.y -= 1;
+                        timeForMovingAni = 0;
 
-					}
-
-
-
-				} else {
+                    }
 
 
-					if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0) {
-						float yChange = -General.cubeSize * General.rubberBandFunction (timeForMovingAni / General.timeForEachMoveAni);
 
-						timeForMovingAni += Time.deltaTime;
-
-						yChange += General.cubeSize * General.rubberBandFunction (timeForMovingAni / General.timeForEachMoveAni);
-						currentBlockObject.transform.position
-	                                      += new Vector3 (0.0f, -yChange, 0.0f);
-
-					}
-
-					if (timeForMovingAni > General.timeForEachMoveAni) {
-						currentScript.fixPositionY ();
-						timeForMovingAni = -1.0f;
-					}
+                } else {
 
 
-					//cameraScript.isFlipped()
-					// 1 : back
-					//-1 : front
+                    if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0) {
+                        float yChange = -General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
+
+                        timeForMovingAni += Time.deltaTime;
+
+                        yChange += General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
+                        currentBlockObject.transform.position
+                                          += new Vector3(0.0f, -yChange, 0.0f);
+
+                    }
+
+                    if (timeForMovingAni > General.timeForEachMoveAni) {
+                        currentScript.fixPositionY();
+                        timeForMovingAni = -1.0f;
+                    }
 
 
-					string dropKey = "space";
-					string leftKey = "a";
-					string rightKey = "d";
-					string upKey = "w";
-					string downKey = "s";
-					string leftRKey = "q";
-					string rightRKey = "e";
+                    //cameraScript.isFlipped()
+                    // 1 : back
+                    //-1 : front
 
 
-					if (cameraScript.isFlipped () == 1) {
-						Swap (ref leftKey, ref rightKey);
-						Swap (ref upKey, ref downKey);
-						Swap (ref leftRKey, ref rightRKey);
-					}
-
-					if (!needStop (currentScript.block.block, 0, -1, 0)) {
-						if (Input.GetKeyDown (leftRKey)) {
-							currentScript.rotateLeft (this);
-							createHintBoxes ();
-						}
-						if (Input.GetKeyDown (rightRKey)) {
-							currentScript.rotateRight (this);
-							createHintBoxes ();
-						}
-					}
-
-					if (Input.GetKeyDown (leftKey)) {
-						if (!needStop (currentScript.block.block, -1, 0, 0)) {
-							currentScript.x -= 1;
-							currentScript.fixPositionX ();
-							createHintBoxes ();
-						}
-					}
-
-					if (Input.GetKeyDown (rightKey)) {
-						if (!needStop (currentScript.block.block, 1, 0, 0)) {
-							currentScript.x += 1;
-							currentScript.fixPositionX ();
-							createHintBoxes ();
-						}
-					}
-
-					if (Input.GetKeyDown (downKey)) {
-						if (!needStop (currentScript.block.block, 0, 0, -1)) {
-							currentScript.z -= 1;
-							currentScript.fixPositionZ ();
-							createHintBoxes ();
-						}
-					}
-
-					if (Input.GetKeyDown (upKey)) {
-						if (!needStop (currentScript.block.block, 0, 0, 1)) {
-							currentScript.z += 1;
-							currentScript.fixPositionZ ();
-							createHintBoxes ();
-						}
-					}
-
-					if (Input.GetKeyDown (dropKey)) {
-						currentTimeForEachDrop = General.timeForEachMoveAni;
-						timeForNextCheck = 0;
-					}
+                    string dropKey = "space";
+                    string leftKey = "a";
+                    string rightKey = "d";
+                    string upKey = "w";
+                    string downKey = "s";
+                    string leftRKey = "q";
+                    string rightRKey = "e";
 
 
-				}
+                    if (cameraScript.isFlipped() == 1) {
+                        Swap(ref leftKey, ref rightKey);
+                        Swap(ref upKey, ref downKey);
+                        Swap(ref leftRKey, ref rightRKey);
+                    }
+
+                    if (!isMovePossible(currentScript.block.block, 0, -1, 0)) {
+                        if (Input.GetKeyDown(leftRKey)) {
+                            currentScript.rotateLeft(this);
+                            createHintBoxes();
+                        }
+                        if (Input.GetKeyDown(rightRKey)) {
+                            currentScript.rotateRight(this);
+                            createHintBoxes();
+                        }
+                    }
+
+                    if (Input.GetKeyDown(leftKey)) {
+                        if (!isMovePossible(currentScript.block.block, -1, 0, 0)) {
+                            currentScript.x -= 1;
+                            currentScript.fixPositionX();
+                            createHintBoxes();
+                        }
+                    }
+
+                    if (Input.GetKeyDown(rightKey)) {
+                        if (!isMovePossible(currentScript.block.block, 1, 0, 0)) {
+                            currentScript.x += 1;
+                            currentScript.fixPositionX();
+                            createHintBoxes();
+                        }
+                    }
+
+                    if (Input.GetKeyDown(downKey)) {
+                        if (!isMovePossible(currentScript.block.block, 0, 0, -1)) {
+                            currentScript.z -= 1;
+                            currentScript.fixPositionZ();
+                            createHintBoxes();
+                        }
+                    }
+
+                    if (Input.GetKeyDown(upKey)) {
+                        if (!isMovePossible(currentScript.block.block, 0, 0, 1)) {
+                            currentScript.z += 1;
+                            currentScript.fixPositionZ();
+                            createHintBoxes();
+                        }
+                    }
+
+                    if (Input.GetKeyDown(dropKey)) {
+                        currentTimeForEachDrop = General.timeForEachMoveAni;
+                        timeForNextCheck = 0;
+                    }
 
 
-			}
+                }
 
-		}
+
+            }
+
+        }
 
     }
 
 
-	public bool GameOver(){
-		return isGameOver;
-	}
+    public bool GameOver() {
+        return isGameOver;
+    }
 }

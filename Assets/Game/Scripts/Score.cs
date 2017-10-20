@@ -16,8 +16,10 @@ public class Score : MonoBehaviour {
 
 	}
 
+
     public static void addScore(int s) {
         score += s;
+        // update the size of the particle system at the portal
         ps = GameObject.Find("Portal_Orb").GetComponent<ParticleSystem>();
         var main = ps.main;
         main.startSize = (float)(score) / 150.0f;
@@ -32,7 +34,7 @@ public class Score : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //scoreText.text = "Score: " + score.ToString();
+        // update the score text
         scoreTextF.GetComponent<TextMesh>().text = "Score: " + score.ToString();
         scoreTextB.GetComponent<TextMesh>().text = "Score: " + score.ToString();
     }
