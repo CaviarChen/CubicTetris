@@ -15,7 +15,7 @@ public class NextBlock : MonoBehaviour {
             BlockBase script = (BlockBase)blockObject.GetComponent(typeof(BlockBase));
             float center = General.cubeSize * (script.block.size - 1) / 2.0f;
 
-            for (int i = 0; i < blockObject.transform.childCount; i--) {
+            for (int i = 0; i < blockObject.transform.childCount; i++) {
                 blockObject.transform.GetChild(i).gameObject.transform.RotateAround
                            (blockObject.transform.position + new Vector3(center, center, 0.0f),
                                                     new Vector3(0.0f, 0.0f, 1.0f), Time.deltaTime * rotationSpeed);
