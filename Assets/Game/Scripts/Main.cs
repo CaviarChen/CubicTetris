@@ -19,7 +19,6 @@ public class Main : MonoBehaviour {
 
 
 
-
     // particle for canceling cubes
     private GameObject particle;
     private ParticleSystem particle_system;
@@ -239,7 +238,7 @@ public class Main : MonoBehaviour {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
                     if (currentScript.block.block[i, j, k] != 0) {
-                        space[i + currentScript.z, k + currentScript.x, j + currentScript.y] = 
+                        space[i + currentScript.z, k + currentScript.x, j + currentScript.y] =
                                                 currentScript.cubes[currentScript.block.block[i, j, k]];
                     }
                 }
@@ -253,7 +252,7 @@ public class Main : MonoBehaviour {
     // find the first row that is full
     int findFullRow() {
         for (int k = 0; k < General.height; k++) {
-            
+
             // for each row
             bool rowFlag = true;
             for (int i = 0; i < 2; i++) {
@@ -273,7 +272,6 @@ public class Main : MonoBehaviour {
         }
 
         return -1;
-
     }
 
 
@@ -310,8 +308,6 @@ public class Main : MonoBehaviour {
                                 space[i, j, k].transform.position -= new Vector3(0.0f, General.cubeSize, 0.0f);
                             }
                         }
-
-
                     }
                 }
             }
@@ -327,9 +323,9 @@ public class Main : MonoBehaviour {
     bool checkGameOver() {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < General.length; j++) {
-                
+
                 // exceed General.height
-                if (space[i, j, General.height] != null) { 
+                if (space[i, j, General.height] != null) {
                     return true;
                 }
             }
@@ -337,6 +333,9 @@ public class Main : MonoBehaviour {
         return false;
     }
 
+    public bool GameOver() {
+        return isGameOver;
+    }
 
     // swap two variables
     static void Swap<T>(ref T x, ref T y) {
@@ -345,12 +344,16 @@ public class Main : MonoBehaviour {
         x = t;
     }
 
+    // Main update method
     void Update() {
+
+        // GameOver panel
         if (isGameOver) {
             canvas.transform.Find("GameOverPanel").gameObject.SetActive(true);
             return;
         }
 
+        // Menu
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (Time.timeScale == 0) {
 
@@ -363,24 +366,20 @@ public class Main : MonoBehaviour {
         }
 
         if (Time.timeScale != 0) {
+            // not paused
             if (isMoving) {
-
-
-
-
-                //  currentBlockObject.transform.position +=
-                //      new Vector3(0.0f, -General.cubeSize * (Time.deltaTime / General.timeForEachMove), 0.0f);
-
-
+                // update timer
                 timeForNextCheck -= Time.deltaTime;
 
-
                 if (timeForNextCheck <= 0) {
+                    // doing one check
+
                     particle.SetActive(false);
                     particle.transform.position = particle_system_start_position;
                     timeForNextCheck += currentTimeForEachDrop;
 
                     if (isMovePossible(currentScript.block.block, 0, -1, 0)) {
+                        // need to finish current block
                         currentScript.fixPositionY();
                         isMoving = false;
                         finishCurrentBlock();
@@ -388,33 +387,34 @@ public class Main : MonoBehaviour {
                         cleanFullRow();
                         if (checkGameOver()) {
                             isGameOver = true;
-                            print("GAME OVER!!!!");
                             return;
                         }
                         Score.addScore(5);
                         addNextBlock();
+
                     } else {
+                        // move one step down
                         currentScript.y -= 1;
                         timeForMovingAni = 0;
-
                     }
 
-
-
                 } else {
+                    // normal moving
 
-
+                    // moving down animation
                     if (timeForMovingAni <= General.timeForEachMoveAni && timeForMovingAni >= 0) {
-                        float yChange = -General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
+                        float yChange = -General.cubeSize *
+                                            General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
 
                         timeForMovingAni += Time.deltaTime;
 
-                        yChange += General.cubeSize * General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
+                        yChange += General.cubeSize *
+                                            General.rubberBandFunction(timeForMovingAni / General.timeForEachMoveAni);
                         currentBlockObject.transform.position
                                           += new Vector3(0.0f, -yChange, 0.0f);
-
                     }
 
+                    // prevent moving too far
                     if (timeForMovingAni > General.timeForEachMoveAni) {
                         currentScript.fixPositionY();
                         timeForMovingAni = -1.0f;
@@ -425,7 +425,7 @@ public class Main : MonoBehaviour {
                     // 1 : back
                     //-1 : front
 
-
+                    // default key
                     string dropKey = "space";
                     string leftKey = "a";
                     string rightKey = "d";
@@ -434,13 +434,14 @@ public class Main : MonoBehaviour {
                     string leftRKey = "q";
                     string rightRKey = "e";
 
-
+                    // swap keys when the camera is flipped
                     if (cameraScript.isFlipped() == 1) {
                         Swap(ref leftKey, ref rightKey);
                         Swap(ref upKey, ref downKey);
                         Swap(ref leftRKey, ref rightRKey);
                     }
 
+                    // rotate
                     if (!isMovePossible(currentScript.block.block, 0, -1, 0)) {
                         if (Input.GetKeyDown(leftRKey)) {
                             currentScript.rotateLeft(this);
@@ -452,6 +453,7 @@ public class Main : MonoBehaviour {
                         }
                     }
 
+                    // movement
                     if (Input.GetKeyDown(leftKey)) {
                         if (!isMovePossible(currentScript.block.block, -1, 0, 0)) {
                             currentScript.x -= 1;
@@ -459,7 +461,6 @@ public class Main : MonoBehaviour {
                             createHintBoxes();
                         }
                     }
-
                     if (Input.GetKeyDown(rightKey)) {
                         if (!isMovePossible(currentScript.block.block, 1, 0, 0)) {
                             currentScript.x += 1;
@@ -467,7 +468,6 @@ public class Main : MonoBehaviour {
                             createHintBoxes();
                         }
                     }
-
                     if (Input.GetKeyDown(downKey)) {
                         if (!isMovePossible(currentScript.block.block, 0, 0, -1)) {
                             currentScript.z -= 1;
@@ -475,7 +475,6 @@ public class Main : MonoBehaviour {
                             createHintBoxes();
                         }
                     }
-
                     if (Input.GetKeyDown(upKey)) {
                         if (!isMovePossible(currentScript.block.block, 0, 0, 1)) {
                             currentScript.z += 1;
@@ -484,23 +483,14 @@ public class Main : MonoBehaviour {
                         }
                     }
 
+                    // drop (change the time for each drop)
                     if (Input.GetKeyDown(dropKey)) {
                         currentTimeForEachDrop = General.timeForEachMoveAni;
                         timeForNextCheck = 0;
                     }
-
-
                 }
-
-
             }
-
         }
-
     }
 
-
-    public bool GameOver() {
-        return isGameOver;
-    }
 }

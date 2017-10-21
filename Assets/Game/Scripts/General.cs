@@ -2,30 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// for gneral information
 public class General : MonoBehaviour {
 
+    // structure for block data
     public struct Block {
 	    public int[,,] block;
 	    public int size;
     }
 
     public static readonly float cubeSize = 1.05f;
-    // width is 2
+    // width is always 2
     public static readonly int length = 8;
     public static readonly int height = 10;
+
     public static readonly float timeForEachDrop = 1.5f;
     public static readonly float timeForEachMoveAni = 0.2f;
-    public static readonly float rotateSpeed = 720.0f;  // degree per second
+    // degree per second
+    public static readonly float rotateSpeed = 720.0f;  
 
 
     // takes x in [0,1] and return y in [0,1]
     // (-cos(x*pi)+1) / 2
+    // makes moving smooth
     public static float rubberBandFunction(float x) {
         return (-Mathf.Cos(x * Mathf.PI) + 1) / 2.0f;
     }
 
+    // preset blocks
     public static Block[] generateBlockTemplate() {
-           // --------------------
+
         General.Block[] blocks = new General.Block[12];
         blocks[0].block = new int[2, 4, 4] {
         {
@@ -232,20 +238,7 @@ public class General : MonoBehaviour {
 		};
 
 		blocks[11].size = 3;
-        // --------------------
 
         return blocks;
     }
-
-
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

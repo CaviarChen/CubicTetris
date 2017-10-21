@@ -13,6 +13,8 @@ public class HideTrees : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // hide some gameobject when the camera at the back
+        // prevent those things blocking the camera
 		if (camerax.transform.position.z < 0) {
 			GetComponent<MeshRenderer> ().enabled = true;
 		} else {

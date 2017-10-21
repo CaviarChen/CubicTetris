@@ -14,6 +14,7 @@ public class LightMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // moving the light based on the position of the camera
 		if (camerax.transform.position.z < 0) {
 			if (transform.rotation.x > 0.515) {
 				transform.Rotate (new Vector3(-1 * speed, 0, 0));

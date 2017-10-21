@@ -12,15 +12,4 @@ public class GameOverPanel : MonoBehaviour {
 	    Cursor.visible = true;
 	    Cursor.lockState = CursorLockMode.None;
     }
-
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

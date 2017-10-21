@@ -11,12 +11,6 @@ public class Score : MonoBehaviour {
 
     private static ParticleSystem ps;
 
-   
-    void Start () {
-
-	}
-
-
     public static void addScore(int s) {
         score += s;
         // update the size of the particle system at the portal

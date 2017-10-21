@@ -15,7 +15,7 @@ public class BlockBase : MonoBehaviour {
     private int currentDegree = 0;
     private int targetDegree = 0;
 
-
+    // left most point
     private int leftOffset() {
         for (int k = 0; k< 4; k++) {
             for (int j = 0; j< 4; j++) {
@@ -29,6 +29,7 @@ public class BlockBase : MonoBehaviour {
         return 0;
     }
 
+    // right most point
     private int rightOffset() {
 	    for (int k = 3; k >= 0; k--) {
 		    for (int j = 0; j < 4; j++) {
@@ -45,13 +46,10 @@ public class BlockBase : MonoBehaviour {
     public void computeXRange() {
         xMin = -leftOffset();
         xMax = General.length - 1 - 4 + rightOffset();
-
-        print(xMin);
-        print(xMax);
-
     }
 
 
+    // create all cubes
     public void createCubes(Main mainScript, int tid) {
         GameObject blockObject = this.gameObject;
 
@@ -66,25 +64,27 @@ public class BlockBase : MonoBehaviour {
 		    for (int j = 0; j < 4; j++) {
 			    for (int k = 0; k < 4; k++) {
 				    if (block.block[i, j, k] != 0) {
+                        // create cube
 					    GameObject newCube = Instantiate(cubePrefab);
 				    	newCube.transform.SetParent(blockObject.transform);
-                        newCube.transform.localPosition = new Vector3(k * General.cubeSize, j * General.cubeSize, i * General.cubeSize);
+                        newCube.transform.localPosition = new Vector3(k * General.cubeSize, j * General.cubeSize,
+                                                                                                i * General.cubeSize);
 
+                        // set texture
                         newCube.transform.GetChild(0).GetComponent<Renderer>()
                                .material.mainTexture = mainScript.textures[tid];
                         newCube.transform.GetChild(1).GetComponent<Renderer>()
                                .material.mainTexture = mainScript.textures[tid];
 
-
-
                         cubes[block.block[i, j, k]] = newCube;
 		    		}
-                        
+
 	    		}
 	    	}
     	}
     }
 
+    // set all cubes as children of a gameobject
     public void setCubeParent(GameObject parent) {
         GameObject blockObject = this.gameObject;
         for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
@@ -93,22 +93,27 @@ public class BlockBase : MonoBehaviour {
 
     }
 
+    // fix position
     public void fixPositionX() {
-        this.gameObject.transform.position = new Vector3(x * General.cubeSize, this.gameObject.transform.position.y, this.gameObject.transform.position.z);
+        this.gameObject.transform.position = new Vector3(x * General.cubeSize, this.gameObject.transform.position.y,
+                                                                               this.gameObject.transform.position.z);
     }
 
     public void fixPositionZ() {
-        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, z * General.cubeSize);
+        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x,
+                                                        this.gameObject.transform.position.y, z * General.cubeSize);
     }
 
     public void fixPositionY() {
-        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, y * General.cubeSize, this.gameObject.transform.position.z);
+        this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, y * General.cubeSize,
+                                                                                this.gameObject.transform.position.z);
     }
 
+    // rotation
     public void rotateRight(Main mainScript) {
 
         int[,,] newBlock = new int[2, 4, 4];
-            
+
         for (int i = 0; i< 2; i++) {
             for (int j = 0; j< block.size; j++) {
                 for (int k = 0; k< block.size; k++) {
@@ -118,13 +123,12 @@ public class BlockBase : MonoBehaviour {
         }
 
         if (mainScript.isMovePossible(newBlock, 0, 0, 0)) {
+            // not possible, shake the camera
 			GameObject.Find("Main Camera").GetComponent<CameraShake> ().shake ();
 			return;
         }
 
         block.block = newBlock;
-
-
         targetDegree -= 90;
     }
 
@@ -132,39 +136,30 @@ public class BlockBase : MonoBehaviour {
 
         int[,,] newBlock = new int[2, 4, 4];
 
-
-        // make 3 Left Rotate
-      //  for (int n = 0; n < 3; n++) {
-            
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < block.size; j++) {
-                    for (int k = 0; k < block.size; k++) {
-                        newBlock[i, j, k] = block.block[i, block.size - k - 1, j];
-                    }
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < block.size; j++) {
+                for (int k = 0; k < block.size; k++) {
+                    newBlock[i, j, k] = block.block[i, block.size - k - 1, j];
                 }
             }
-
-      //  }
+        }
 
         if (mainScript.isMovePossible(newBlock, 0, 0, 0)) {
+            // not possible, shake the camera
             GameObject.Find("Main Camera").GetComponent<CameraShake>().shake();
             return;
         }
 
         block.block = newBlock;
-
-
         targetDegree += 90;
     }
 
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
 	// Update is called once per frame
 	void Update() {
+
+        // smooth rotaion
+        // tricky implement
         if (targetDegree != currentDegree) {
             int changeDegree = targetDegree - currentDegree;
             int changeDegreeNow = (int)(Time.deltaTime * General.rotateSpeed);
@@ -181,11 +176,11 @@ public class BlockBase : MonoBehaviour {
             GameObject blockObject = this.gameObject;
             float center = General.cubeSize * (block.size - 1) / 2.0f;
 
+            // rotate all cubes
             for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
-                blockObject.transform.GetChild(i).gameObject.transform.RotateAround
-                           (transform.position + new Vector3(center, center, 0.0f), new Vector3(0.0f, 0.0f, 1.0f), changeDegreeNow);
+                blockObject.transform.GetChild(i).gameObject.transform.RotateAround(transform.position +
+                                   new Vector3(center, center, 0.0f), new Vector3(0.0f, 0.0f, 1.0f), changeDegreeNow);
             }
-
 
         } else {
             targetDegree = 0;
