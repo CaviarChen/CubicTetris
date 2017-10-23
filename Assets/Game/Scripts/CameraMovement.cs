@@ -11,11 +11,11 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour {
 	private GameObject gameArea;
 	private Main mainscript;
-	protected Transform Camera;
-	protected Transform CameraPivot;
+	private Transform Camera;
+	private Transform CameraPivot;
 
-	protected Vector3 cameraRotation;
-	protected float _CameraDistance = 10f;
+	private Vector3 cameraRotation;
+	private float _CameraDistance = 10f;
 
 	public float MouseSpeed = 4f;
 	public float OrbitDampening = 10f;
@@ -26,58 +26,67 @@ public class CameraMovement : MonoBehaviour {
     public GameObject gameOverText;
     public GameObject gameOverScoreText;
 
-    private int flipped = -1;
-	//flipped = -1, A left movement, D right movement 
-	//flipper = 1, A right movement, D left movement
 
-	private float offsetspeed;
+
 	private GameObject mainCamera;
 	private GameObject floor;
-	private Vector3 cameraC_center;
+
 	private Vector3 target_center;
     private Vector3 gameOver_center;
 	private Vector3 camera_start_position;
 	private Vector3 camera_back_position;
-	private Vector3 camera_reset_position;
 	private Vector3 camera_gameover_position;
 	private bool isGameOver = false;
-	private int front;
+
+	private int front = 1;
+	//front = 1, A left movement, D right movement 
+	//front = -1, A right movement, D left movement
+
 	private Vector3 velocity;
     private Vector3 velocity2;
     private Vector3 targetPosition;
 
 	private bool ismovingback = false;
 
+
 	public int isFlipped(){
-		return flipped;
+		return -front;
 	}
 
 	void Start(){
-
 		this.Camera = this.transform;
 		this.CameraPivot = this.transform.parent;
 		gameArea = GameObject.Find ("GameArea");
 		mainscript = (Main)gameArea.GetComponent (typeof(Main));
 		mainCamera = GameObject.Find ("Main Camera");
 		floor = GameObject.FindGameObjectWithTag ("Floor");
-		cameraC_center = mainCamera.GetComponent<SphereCollider> ().center;
-		targetPosition = cameraC_center;
+
+		//camera start position 
+		targetPosition = mainCamera.GetComponent<SphereCollider> ().center;
+
+		//front and back centre position 
 		camera_start_position = mainCamera.transform.position;
 		camera_back_position = new Vector3 (camera_start_position.x,camera_start_position.y,(2*target_center.z -camera_start_position.z));
-		camera_reset_position = camera_back_position;
+
+		//game over position
 		camera_gameover_position = new Vector3 (camera_start_position.x,40.0f,-40.0f);
+
+		//camera look at position
 		target_center = new Vector3(floor.GetComponent<BoxCollider> ().center.x,
 			3.5f,
 			floor.GetComponent<BoxCollider> ().center.z);
-		offsetspeed = speed;
-
+		
+		//gameOver
         isGameOver = false;
 		gameOverText.SetActive (false);
         gameOverScoreText.SetActive (false);
+		gameOver_center = target_center;
+
+		//mouser invisible
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        gameOver_center = target_center;
+        
 
 
 
@@ -85,6 +94,7 @@ public class CameraMovement : MonoBehaviour {
 		
 	void Update(){
 
+		//set game over position 
         if (isGameOver) {
             gameOver_center = Vector3.SmoothDamp(gameOver_center, gameOverText.transform.position + new Vector3(2, 0, -1), ref velocity2, 0.5f);
             transform.position = Vector3.SmoothDamp(transform.position, camera_gameover_position, ref velocity, 0.5f);
@@ -92,6 +102,7 @@ public class CameraMovement : MonoBehaviour {
             return;
         }
 
+		//show 'Game Over' Text 
 		if (mainscript.GameOver ()) {
 			gameOverText.SetActive (true);
 			isGameOver = true;
@@ -102,18 +113,18 @@ public class CameraMovement : MonoBehaviour {
 			return;
 		}
         
-
+		//check if the user is looking from the front view
 		if (transform.position.z < 0) {
 			front = 1;
 		} else {
 			front = -1;
 		}
 
-
+		//start to turn back
 		if (!ismovingback && (Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))) {
 			ismovingback = true;
-			flipped = -flipped;
-			if (flipped == -1) {
+			front = -front;
+			if (front == 1) {
 				targetPosition = camera_start_position;
                 scoreTextF.SetActive(true);
                 scoreTextB.SetActive(false);
@@ -125,12 +136,13 @@ public class CameraMovement : MonoBehaviour {
             }
 		}
 
-
+		//complete turn-around
 		if (transform.position == targetPosition) {
 			ismovingback = false;
 
 		}
 
+		//is turning back
 		if (ismovingback) {
 			Quaternion QT = Quaternion.Euler(0, 0, 0);
 			this.CameraPivot.rotation = QT;
@@ -140,12 +152,12 @@ public class CameraMovement : MonoBehaviour {
 		}
 
 			
-
-
+		//get mouse input and move camera
 		if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0){
 			cameraRotation.x += Input.GetAxis("Mouse X") * MouseSpeed;
 			cameraRotation.y += Input.GetAxis("Mouse Y") * MouseSpeed;
 
+			//set boundarys
 			if (cameraRotation.y < -25f)
 				cameraRotation.y = -25f;
 			else if (cameraRotation.y > 50f)
