@@ -9513,16 +9513,14 @@ MonoBehaviour:
   blockPrefab: {fileID: 1617773752388696, guid: 53a5ca8b5ca614a68ad3b0e94d129882,
     type: 2}
   hintPrefab: {fileID: 1651432123607358, guid: 0f9ac32e3b5754729b79472f67deed46, type: 2}
-  camera: {fileID: 0}
-  cameraScript: {fileID: 0}
-  NextBlock: {fileID: 1127520452}
-  FinishedCube: {fileID: 1283862312}
-  GameArea: {fileID: 1054221707}
   textures:
   - {fileID: 2800000, guid: 0ad7bd6b0aa03264b85f9420b82556da, type: 3}
   - {fileID: 2800000, guid: cea6032a9b1fcf749bc64029a4e53971, type: 3}
   - {fileID: 2800000, guid: 08440c9f0d49f1b49b1afe2fa98a1b6c, type: 3}
   - {fileID: 2800000, guid: 5d6cb50dfc1259e40976d350f347cafb, type: 3}
+  NextBlock: {fileID: 1127520452}
+  FinishedCube: {fileID: 1283862312}
+  GameArea: {fileID: 1054221707}
 --- !u!4 &1054221709
 Transform:
   m_ObjectHideFlags: 0
@@ -9712,7 +9710,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1125331871}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.75, y: 0, z: -14}
+  m_LocalPosition: {x: 2.75, y: 3, z: -18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1560718361}
@@ -11229,7 +11227,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1560718360}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1125331876}
@@ -13132,7 +13130,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 594870454
+  randomSeed: -76106441
   InitialModule:
     serializedVersion: 3
     enabled: 1
