@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 23906649670994308}
   - component: {fileID: 64853741408019478}
   - component: {fileID: 65462978569605784}
+  - component: {fileID: 114924270061201794}
   m_Layer: 0
   m_Name: Cliff_Desert_03
   m_TagString: Untagged
@@ -58,6 +59,7 @@ GameObject:
   - component: {fileID: 23935220197208630}
   - component: {fileID: 64702382314882254}
   - component: {fileID: 65808609148259070}
+  - component: {fileID: 114689780183177532}
   m_Layer: 0
   m_Name: Cliff_Desert_03
   m_TagString: Untagged
@@ -248,3 +250,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.04, y: 0.04, z: 0.04}
   m_Center: {x: 0, y: 15, z: 2}
+--- !u!114 &114689780183177532
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1742284406754294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c927b40a95f5c4a4586a3bef7bdf4617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114924270061201794
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1261591578039708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c927b40a95f5c4a4586a3bef7bdf4617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

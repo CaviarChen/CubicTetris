@@ -10,8 +10,8 @@ public class Main : MonoBehaviour {
     // block data
     public static General.Block[] blocks;
 
-    // cube textures
-    public Texture[] textures;
+    // cube colours
+    public Color[] colours;
 
     public GameObject NextBlock;
     public GameObject FinishedCube;
@@ -38,7 +38,7 @@ public class Main : MonoBehaviour {
     private bool isMoving = false;
     private float timeForMovingAni;
     private int nextBlockId;
-    private int nextBlockTextureId;
+    private int nextBlockColourId;
     private float currentTimeForEachDrop;
     private bool isGameOver = false;
 
@@ -67,7 +67,7 @@ public class Main : MonoBehaviour {
 
         // init and set up the first block
         nextBlockId = Random.Range(0, blocks.Length);
-        nextBlockTextureId = Random.Range(0, textures.Length);
+        nextBlockColourId = Random.Range(0, colours.Length);
         addNextBlock();
         Score.init();
 
@@ -141,7 +141,7 @@ public class Main : MonoBehaviour {
     void addNextBlock() {
 
         // create block
-        currentBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockTextureId);
+        currentBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockColourId);
         currentScript = (BlockBase)currentBlockObject.GetComponent(typeof(BlockBase));
 
         // random pos
@@ -174,8 +174,8 @@ public class Main : MonoBehaviour {
 
         // random pick next block
         nextBlockId = Random.Range(0, blocks.Length);
-        nextBlockTextureId = Random.Range(0, textures.Length);
-        currentNextBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockTextureId);
+        nextBlockColourId = Random.Range(0, colours.Length);
+        currentNextBlockObject = createBlock(this.gameObject, blocks[nextBlockId], nextBlockColourId);
         currentNextBlockObject.transform.parent = NextBlock.transform;
         currentNextBlockObject.transform.localPosition = new Vector3(0, 0, 0);
 
@@ -183,13 +183,13 @@ public class Main : MonoBehaviour {
 
 
     // create a block
-    GameObject createBlock(GameObject playArea, General.Block block, int tid) {
+    GameObject createBlock(GameObject playArea, General.Block block, int cid) {
 
         GameObject blockObject = Instantiate(blockPrefab);
         blockObject.transform.SetParent(playArea.transform);
         BlockBase script = (BlockBase)blockObject.GetComponent(typeof(BlockBase));
         script.block = block;
-        script.createCubes(this, tid);
+        script.createCubes(this, cid);
         script.computeXRange();
 
         return blockObject;
