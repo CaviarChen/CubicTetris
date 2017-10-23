@@ -6,7 +6,6 @@ public class LightMovement : MonoBehaviour {
 
 	
 	public float speed;
-    public Material cubes;
 
     private GameObject camerax;
 
@@ -19,9 +18,6 @@ public class LightMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-        cubes.SetVector ("_PointLightPosition", this.gameObject.transform.position);
-
 		transform.LookAt (Vector3.zero);
         // moving the light based on the position of the camera
 		if (camerax.transform.position.z < 0) {

@@ -50,7 +50,7 @@ public class BlockBase : MonoBehaviour {
 
 
     // create all cubes
-    public void createCubes(Main mainScript, int tid) {
+    public void createCubes(Main mainScript, int cid) {
         GameObject blockObject = this.gameObject;
 
 	    for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
@@ -70,11 +70,11 @@ public class BlockBase : MonoBehaviour {
                         newCube.transform.localPosition = new Vector3(k * General.cubeSize, j * General.cubeSize,
                                                                                                 i * General.cubeSize);
 
-                        // set texture
+                        // set colour
                         newCube.transform.GetChild(0).GetComponent<Renderer>()
-                               .material.mainTexture = mainScript.textures[tid];
+                               .material.SetColor("_ObjectColor", mainScript.colours[cid]);
                         newCube.transform.GetChild(1).GetComponent<Renderer>()
-                               .material.mainTexture = mainScript.textures[tid];
+                               .material.SetColor("_ObjectColor", mainScript.colours[cid]);
 
                         cubes[block.block[i, j, k]] = newCube;
 		    		}
