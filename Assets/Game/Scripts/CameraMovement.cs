@@ -67,7 +67,7 @@ public class CameraMovement : MonoBehaviour {
 		camera_reset_position = camera_back_position;
 		camera_gameover_position = new Vector3 (camera_start_position.x,40.0f,-40.0f);
 		target_center = new Vector3(floor.GetComponent<BoxCollider> ().center.x,
-			floor.GetComponent<BoxCollider> ().center.y,
+			3.5f,
 			floor.GetComponent<BoxCollider> ().center.z);
 		offsetspeed = speed;
 
@@ -146,10 +146,10 @@ public class CameraMovement : MonoBehaviour {
 			cameraRotation.x += Input.GetAxis("Mouse X") * MouseSpeed;
 			cameraRotation.y += Input.GetAxis("Mouse Y") * MouseSpeed;
 
-			if (cameraRotation.y < -20f)
-				cameraRotation.y = -20f;
-			else if (cameraRotation.y > 60f)
-				cameraRotation.y = 60f;
+			if (cameraRotation.y < -25f)
+				cameraRotation.y = -25f;
+			else if (cameraRotation.y > 50f)
+				cameraRotation.y = 50f;
 			if (cameraRotation.x < -40f)
 				cameraRotation.x = -40f;
 			else if (cameraRotation.x > 40f)
