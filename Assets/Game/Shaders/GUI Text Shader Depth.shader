@@ -1,4 +1,5 @@
 ﻿// Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
+// change ZTest mode
 // changes based on instruction from http://answers.unity3d.com/questions/1316560/3d-text-visible-though-3d-game-object-is-unsolvabl.html
 
 Shader "GUI/Text Shader Depth" {

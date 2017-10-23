@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class LightMovement : MonoBehaviour {
 
-	public GameObject camerax;
+	
 	public float speed = 0.2f;
+    public Material cubes;
+
+    private GameObject camerax;
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -14,6 +19,11 @@ public class LightMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        print(this.gameObject.transform.position);
+        cubes.SetVector ("_PointLightPosition", this.gameObject.transform.position);
+
+
         // moving the light based on the position of the camera
 		if (camerax.transform.position.z < 0) {
 			if (transform.rotation.x > 0.515) {
