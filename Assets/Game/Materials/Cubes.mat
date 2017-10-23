@@ -79,4 +79,4 @@ Material:
     - _ObjectColor: {r: 0.4437716, g: 0.65868634, b: 0.83823526, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _PointLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _PointLightPosition: {r: 22.889385, g: 146.69682, b: -99.263336, a: 0}
+    - _PointLightPosition: {r: 22.88937, g: 146.4, b: -99.700645, a: 0}
