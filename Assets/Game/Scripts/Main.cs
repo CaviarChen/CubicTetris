@@ -290,8 +290,6 @@ public class Main : MonoBehaviour {
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < General.length; j++) {
                     Destroy(space[i, j, row]);
-                    particle.SetActive(true);
-                    particle_system.Emit(1000);
                 }
             }
 
@@ -314,8 +312,19 @@ public class Main : MonoBehaviour {
             }
         }
 
-        // canceling mutiple rows at once is always better
-        Score.addScore(count * 100 + 10 * count * count);
+        if (count > 0) {
+            // play SE
+            SE.Play(1);
+
+            // canceling mutiple rows at once is always better
+            Score.addScore(count * 100 + 10 * count * count);
+
+            // particle system
+            particle.SetActive(true);
+            particle_system.Emit(1000);
+        }
+
+
 
     }
 
@@ -383,10 +392,17 @@ public class Main : MonoBehaviour {
                         // need to finish current block
                         currentScript.fixPositionY();
                         isMoving = false;
+                        // play SE
+                        SE.Play(0);
+
                         finishCurrentBlock();
                         clearHintBoxes();
                         cleanFullRow();
                         if (checkGameOver()) {
+
+                            // play SE
+                            SE.Play(4);
+
                             isGameOver = true;
                             return;
                         }
@@ -460,6 +476,11 @@ public class Main : MonoBehaviour {
                             currentScript.x -= 1;
                             currentScript.fixPositionX();
                             createHintBoxes();
+                            // play SE
+                            SE.Play(3);
+                        } else {
+                            // play SE
+                            SE.Play(2);
                         }
                     }
                     if (Input.GetKeyDown(rightKey)) {
@@ -467,6 +488,11 @@ public class Main : MonoBehaviour {
                             currentScript.x += 1;
                             currentScript.fixPositionX();
                             createHintBoxes();
+                            // play SE
+                            SE.Play(3);
+                        } else {
+                            // play SE
+                            SE.Play(2);
                         }
                     }
                     if (Input.GetKeyDown(downKey)) {
@@ -474,6 +500,11 @@ public class Main : MonoBehaviour {
                             currentScript.z -= 1;
                             currentScript.fixPositionZ();
                             createHintBoxes();
+                            // play SE
+                            SE.Play(3);
+                        } else {
+                            // play SE
+                            SE.Play(2);
                         }
                     }
                     if (Input.GetKeyDown(upKey)) {
@@ -481,6 +512,11 @@ public class Main : MonoBehaviour {
                             currentScript.z += 1;
                             currentScript.fixPositionZ();
                             createHintBoxes();
+                            // play SE
+                            SE.Play(3);
+                        } else {
+                            // play SE
+                            SE.Play(2);
                         }
                     }
 

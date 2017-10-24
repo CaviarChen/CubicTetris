@@ -142,8 +142,13 @@ public class BlockBase : MonoBehaviour {
         if (mainScript.isMovePossible(newBlock, 0, 0, 0)) {
             // not possible, shake the camera
 			GameObject.Find("Main Camera").GetComponent<CameraShake> ().shake ();
+            // play SE
+            SE.Play(2);
 			return;
         }
+
+        // play SE
+        SE.Play(3);
 
         block.block = newBlock;
         targetDegree -= 90;
@@ -164,8 +169,13 @@ public class BlockBase : MonoBehaviour {
         if (mainScript.isMovePossible(newBlock, 0, 0, 0)) {
             // not possible, shake the camera
             GameObject.Find("Main Camera").GetComponent<CameraShake>().shake();
+            // play SE
+            SE.Play(2);
             return;
         }
+
+        // play SE
+        SE.Play(3);
 
         block.block = newBlock;
         targetDegree += 90;
