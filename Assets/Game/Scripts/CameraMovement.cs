@@ -1,10 +1,4 @@
-﻿
-//reference: https://www.youtube.com/watch?v=bVo0YLLO43s
-
-
-
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
