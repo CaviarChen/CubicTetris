@@ -231,6 +231,7 @@ public class Main : MonoBehaviour {
         // fix position
         currentScript.fixPositionX();
         currentScript.fixPositionY();
+        currentScript.fixRotation();
 
 
         // add to space array

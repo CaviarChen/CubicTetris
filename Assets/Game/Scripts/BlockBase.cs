@@ -109,6 +109,23 @@ public class BlockBase : MonoBehaviour {
                                                                                 this.gameObject.transform.position.z);
     }
 
+    // fix rotation
+    public void fixRotation() {
+        if (targetDegree != currentDegree) {
+            int changeDegree = targetDegree - currentDegree;
+
+            GameObject blockObject = this.gameObject;
+            float center = General.cubeSize * (block.size - 1) / 2.0f;
+
+            // rotate all cubes
+            for (int i = blockObject.transform.childCount - 1; i >= 0; i--) {
+                blockObject.transform.GetChild(i).gameObject.transform.RotateAround(transform.position +
+                                   new Vector3(center, center, 0.0f), new Vector3(0.0f, 0.0f, 1.0f), changeDegree);
+            }
+        }
+    }
+
+
     // rotation
     public void rotateRight(Main mainScript) {
 
