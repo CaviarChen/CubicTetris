@@ -481,6 +481,8 @@ public class Main : MonoBehaviour {
                         } else {
                             // play SE
                             SE.Play(2);
+                            // not possible, shake the camera
+                            GameObject.Find("Main Camera").GetComponent<CameraShake>().shake();
                         }
                     }
                     if (Input.GetKeyDown(rightKey)) {
@@ -493,6 +495,8 @@ public class Main : MonoBehaviour {
                         } else {
                             // play SE
                             SE.Play(2);
+                            // not possible, shake the camera
+                            GameObject.Find("Main Camera").GetComponent<CameraShake>().shake();
                         }
                     }
                     if (Input.GetKeyDown(downKey)) {
@@ -505,6 +509,8 @@ public class Main : MonoBehaviour {
                         } else {
                             // play SE
                             SE.Play(2);
+                            // not possible, shake the camera
+                            GameObject.Find("Main Camera").GetComponent<CameraShake>().shake();
                         }
                     }
                     if (Input.GetKeyDown(upKey)) {
@@ -517,6 +523,8 @@ public class Main : MonoBehaviour {
                         } else {
                             // play SE
                             SE.Play(2);
+                            // not possible, shake the camera
+                            GameObject.Find("Main Camera").GetComponent<CameraShake>().shake();
                         }
                     }
 
