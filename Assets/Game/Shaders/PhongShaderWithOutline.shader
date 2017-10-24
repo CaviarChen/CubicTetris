@@ -100,6 +100,8 @@ Shader "Custom/PhongShaderWithOutline"
         // phong shader for object itself (from workshop)
         Pass
         {
+            // prevent some issues
+            Tags{ "DisableBatching" = "True" }
             // in depth buffer
             ZWrite On
 
