@@ -158,8 +158,8 @@ public class CameraMovement : MonoBehaviour {
 			cameraRotation.y += Input.GetAxis("Mouse Y") * MouseSpeed;
 
 			//set boundarys
-			if (cameraRotation.y < -25f)
-				cameraRotation.y = -25f;
+			if (cameraRotation.y < -15f)
+				cameraRotation.y = -15f;
 			else if (cameraRotation.y > 50f)
 				cameraRotation.y = 50f;
 			if (cameraRotation.x < -40f)
