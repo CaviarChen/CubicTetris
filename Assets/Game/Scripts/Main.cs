@@ -32,7 +32,7 @@ public class Main : MonoBehaviour {
     // current and next block
     private GameObject currentBlockObject;
     private GameObject currentNextBlockObject = null;
-    private BlockBase currentScript;
+    private BlockBase currentScript = null;
 
     private float timeForNextCheck;
     private bool isMoving = false;
@@ -50,12 +50,15 @@ public class Main : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+
+        blocks = General.generateBlockTemplate();
+
+
         GameObject camerax;
 
         // camera
         camerax = GameObject.FindGameObjectWithTag("MainCamera");
         cameraScript = (CameraMovement)camerax.GetComponent(typeof(CameraMovement));
-        blocks = General.generateBlockTemplate();
         canvas = GameObject.Find("Canvas");
         cameraPivot = GameObject.Find("CameraPivot");
 
