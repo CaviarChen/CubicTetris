@@ -4,6 +4,12 @@
 A 3D Tetris game made with unity by Zijun Chen, Zhe Tang & Yu Liu.  
 Project of **COMP30019 Graphics and Interaction** (University of Melbourne)
 
+## Download
+(For those who would like to play this game directly)  
+**Release page:** https://github.com/CaviarChen/CubicTetris/releases  
+
+**VBox(威盒):** http://store.vlabpro.com/vapp/198-1/
+
 ## Screenshots
 ![](https://raw.githubusercontent.com/CaviarChen/CubicTetris/master/ScreenShot/1.png)  
 ![](https://raw.githubusercontent.com/CaviarChen/CubicTetris/master/ScreenShot/2.png)
