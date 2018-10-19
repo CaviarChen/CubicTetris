@@ -1,6 +1,6 @@
 # Cubic Tetris
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![GitHub repo size in bytes](https://img.shields.io/github/repo-size/badges/shields.svg)
+![GitHub repo size in bytes](https://img.shields.io/github/repo-size/badges/shields.svg?maxAge=3600)
 
 A 3D Tetris game made with unity by Zijun Chen, Zhe Tang & Yu Liu.  
 Project of **COMP30019 Graphics and Interaction** (University of Melbourne)
